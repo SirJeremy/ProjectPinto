@@ -29,9 +29,9 @@ public class SwipeInputManager : MonoSingleton<SwipeInputManager> {
     [SerializeField] [Tooltip("For swipes, it fudges the starting position and ending positions via averaging. This number caps the total seconds back it will store for starting position fudge.")]
     private float swipeFudge = 1;
     [SerializeField] [Tooltip("This controls how far back the old positions should be considered into decideding the final position of the swipe. Note that setting this value too big or bigger than swipe fudge may cause swipes to fail.")]
-    private float endFudge = .05f;
+    private float endFudge = .1f;
     [SerializeField]
-    private float swipeThreshhold = 1; //need to find
+    private float swipeThreshhold = .5f; //need to find
 
     private List<PositionTime> positions = new List<PositionTime>();
     private float positionsTime = 0; //bad name
@@ -86,6 +86,7 @@ public class SwipeInputManager : MonoSingleton<SwipeInputManager> {
             if(GetDistanceSwiped(Vector2.Distance(StartPosition, endPosition), positionsTime, manualDpi) >= swipeThreshhold) {
                 Swipe swipe = new Swipe(StartPosition, endPosition);
                 Debug.Log("Swipe successful  " + swipe.ToString());
+                EventManager.AnnounceOnSwipe(swipe);
             }
         }
         positions.Clear();
@@ -107,12 +108,16 @@ public class SwipeInputManager : MonoSingleton<SwipeInputManager> {
             positionsTime = deltaTime;
     }
     private bool GetEndFudgedPosition(out Vector2 endPosition) {
-        if(positions.Count > 2) {
+        if(positions.Count == 2) {
+            endPosition = positions[1].Position;
+            return true;
+        }
+        else if(positions.Count > 2) {
             //the following is to find the wighted average of the position over the past endFudge
             int i = positions.Count - 1; //i == last position in positions
             Vector2 valueWeight = Vector2.zero; //valueWeight is (position.n * deltaTime.n) + (position.n-1 * deltaTime.n-1) + ....
             float totalWeight = 0; //totalWeight is the deltaTime over total positions considered in the fudge
-            while(totalWeight < endFudge && i > 1) {
+            while(totalWeight < endFudge && i > 0) {
                 totalWeight += positions[i].DeltaTime;
                 valueWeight += positions[i].Position * positions[i].DeltaTime;
             }

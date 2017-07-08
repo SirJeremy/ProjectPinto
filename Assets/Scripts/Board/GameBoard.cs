@@ -1,27 +1,50 @@
-﻿public class GameBoard {
+﻿using UnityEngine;
+public class GameBoard {
+    #region Variables
     private BoardTile[,] board;
     private int boardWidth = 0;
     private int boardHeight = 0;
     private IndexVector currentPlayerPosition = IndexVector.Zero;
+    #endregion
 
+    #region Properties
     public BoardTile[,] Board { get { return board; } }
+    #endregion
 
+    #region Constructors
+    // When [,] is initailised via { { }, { } }. It is done like this:
+    // { { x:0y:0, x:0;y:1 },  { x:1y:0, x:1y:1 } }, or
+    //  x:0y:1   x:1y:1
+    //  x:0y:0   x:1y:0
+    // in game, y is substituted for z
     public GameBoard(ETile[,] tiles, IndexVector startingPosition) {
-        //tiles >>> board
+        //Create Board
         boardWidth = tiles.GetLength(0);
         boardHeight = tiles.GetLength(1);
         board = new BoardTile[boardWidth, boardHeight];
         for(int i = 0; i < boardWidth; i++) {
-            for(int j = 0; i < boardHeight; j++) {
+            for(int j = 0; j < boardHeight; j++) {
                 board[i, j] = new BoardTile(tiles[i, j], new IndexVector(i, j));
             }
         }
+        //Set player starting position
         board[startingPosition.X, startingPosition.Y].IsOccupiedByPlayer = true;
+    }
+    #endregion
+
+    #region Methods
+    public void DestroyBoard() {
+        for(int i = 0; i < boardWidth; i++) {
+            for(int j = 0; i < boardHeight; j++) {
+                board[i, j].DestroyTile();
+            }
+        }
+        board = null; //is neccessary?
     }
     public bool CanMoveInDirection(EDirection direction) {
         switch(direction) {
             case EDirection.UP:
-                if(currentPlayerPosition.Y < boardHeight) {
+                if(currentPlayerPosition.Y < boardHeight - 1) {
                     IndexVector destination = currentPlayerPosition + GetDirection(direction);
                     return board[destination.X, destination.Y].IsTraversable;
                 }
@@ -39,7 +62,7 @@
                 }
                 return false;
             case EDirection.RIGHT:
-                if(currentPlayerPosition.Y < boardWidth) {
+                if(currentPlayerPosition.X < boardWidth - 1) {
                     IndexVector destination = currentPlayerPosition + GetDirection(direction);
                     return board[destination.X, destination.Y].IsTraversable;
                 }
@@ -59,6 +82,7 @@
         board[destination.X, destination.Y].IsPlayerIsMovingIn = false;
         board[destination.X, destination.Y].IsOccupiedByPlayer = true;
         board[currentPlayerPosition.X, currentPlayerPosition.Y].IsOccupiedByPlayer = false;
+        currentPlayerPosition = destination;
     }
     public void FinishMovePlayer(EDirection direction) {
         FinishMovePlayer(currentPlayerPosition + GetDirection(direction));
@@ -77,4 +101,5 @@
                 return IndexVector.Up;
         }
     }
+    #endregion
 }
