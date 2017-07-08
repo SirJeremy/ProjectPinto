@@ -1,4 +1,5 @@
-﻿public struct IndexVector {
+﻿using UnityEngine;
+public struct IndexVector {
     private int x;
     private int y;
 
@@ -9,10 +10,16 @@
     public static IndexVector Down { get { return new IndexVector(0, -1); } }
     public static IndexVector Left { get { return new IndexVector(-1, 0); } }
     public static IndexVector Right { get { return new IndexVector(1, 0); } }
+    public Vector2 ToVector2 { get { return new Vector2(X, Y); } }
+    public Vector3 ToVector3 { get { return new Vector3(X, 0, Y); } }
 
     public IndexVector(int x, int y) {
         this.x = 0;
         this.y = 0;
+    }
+    public IndexVector(Vector2 vector) {
+        x = (int)vector.x;
+        y = (int)vector.y;
     }
 
     public override string ToString() {
