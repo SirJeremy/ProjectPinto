@@ -1,14 +1,22 @@
 ﻿using UnityEngine;
 
 public class BoardManager : MonoSingleton<BoardManager> {
-    [SerializeField]
-    private GameObject player;
+    private GameObject playerInstance;
     private GameBoard board;
+
     public GameBoard GameBoard { get { return board; } }
 
     private void Start() {
-        IndexVector playerStartingLocation = IndexVector.Zero;
-        board = new GameBoard(new ETile[2,2] { {ETile.EMPTY, ETile.EMPTY }, {ETile.WALL, ETile.GOAL } }, playerStartingLocation);
-        Player.SpawnPlayer(playerStartingLocation);
+        SpawnLevel(IndexVector.Zero, new ETile[2, 2] { { ETile.EMPTY, ETile.EMPTY }, { ETile.WALL, ETile.GOAL } });
+    }
+    public void SpawnLevel(IndexVector playerStartingLocation, ETile[,] tiles) {
+        board = new GameBoard(tiles, playerStartingLocation);
+        playerInstance = Player.SpawnPlayer(playerStartingLocation);
+    }
+    public void DestroyLevel() {
+        board.DestroyBoard();
+        board = null;
+        Destroy(playerInstance);
+        playerInstance = null;
     }
 }

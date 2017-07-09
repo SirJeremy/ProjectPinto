@@ -13,6 +13,6 @@ public class GoalTile : GameTile {
             GoalReached();
     }
     private void GoalReached() {
-        Debug.Log("Goal Reached");
+        EventManager.AnnounceOnGoalReached();
     }
 }

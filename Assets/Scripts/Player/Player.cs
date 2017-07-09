@@ -6,14 +6,17 @@ public class Player : MonoBehaviour {
     private float moveSpeed = 2f;
     private IndexVector currentLocation = IndexVector.Zero;
     private bool isMoving = false;
+    private bool canMove = true;
     #endregion
 
     #region MonoBehaviours
     private void OnEnable() {
         EventManager.OnSwipe += OnSwipe;
+        EventManager.OnGoalReached += OnGoalReached;
     }
     private void OnDisable() {
         EventManager.OnSwipe -= OnSwipe;
+        EventManager.OnGoalReached -= OnGoalReached;
     }
     private void OnDestroy() {
         StopAllCoroutines();
@@ -28,11 +31,17 @@ public class Player : MonoBehaviour {
     public void Initialize(IndexVector startingLocation) {
         currentLocation = startingLocation;
     }
+    #endregion
+
+    #region EventCatchers
+    private void OnGoalReached() {
+        canMove = false;
+    }
     private void OnSwipe(Swipe swipe) {
-        if(isMoving)
+        if(isMoving || !canMove)
             return;
         EDirection dir = swipe.GetEDirection;
-        if(BoardManager.Instance.GameBoard.CanMoveInDirection(dir))             
+        if(BoardManager.Instance.GameBoard.CanMoveInDirection(dir))
             StartCoroutine(Move(currentLocation + IndexVector.GetDirection(dir), dir));
     }
     #endregion
