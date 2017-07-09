@@ -10,11 +10,13 @@
     public static event IndexVectorBool OnTraversabilityChange;
     public static event DSwipe OnSwipe;
     public static event DIndexVector OnPlayerLocationChange;
+    public static event Empty OnGoalReached;
     #endregion
 
     #region EventCalls
     public static void AnnounceOnTraversabilityChange(IndexVector location, bool isTraversable) { if(OnTraversabilityChange != null) OnTraversabilityChange(location, isTraversable); }
     public static void AnnounceOnSwipe(Swipe swipe) { if(OnSwipe != null) OnSwipe(swipe); }
     public static void AnnounceOnPlayerLocationChange(IndexVector location) { if(OnPlayerLocationChange != null) OnPlayerLocationChange(location); }
+    public static void AnnounceOnGoalReached() { if(OnGoalReached != null) OnGoalReached(); }
     #endregion
 }

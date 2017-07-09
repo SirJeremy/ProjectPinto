@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
+[System.Serializable]
 public struct IndexVector {
     #region Variables
+    [SerializeField]
     private int x;
+    [SerializeField]
     private int y;
     #endregion
 
