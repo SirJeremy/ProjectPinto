@@ -6,7 +6,7 @@ public class BoardTileSetEditorWindow : EditorWindow {
     public BoardTileSet tileSet = null;
     public int width = 2;
     public int height = 3;
-    public TileData tiles = null;
+    public TileSetData tiles = null;
 
     [MenuItem("Window/Custom/Tile Set Editor")]
     public static void ShowWindow() {
