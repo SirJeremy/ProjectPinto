@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 [System.Serializable]
-public class TileData {
+public class TileSetData {
     public int height = 2;
     public int width = 2;
     public List<TileDataColumn> rows;
 
-    public TileData(int width, int height) {
+    public TileSetData(int width, int height) {
         //initailize list
         rows = new List<TileDataColumn>();
         //bound and set width and height
@@ -26,7 +26,7 @@ public class TileData {
             rows.Add(new TileDataColumn(this.height));
         }
     }
-    public TileData(TileData toCopy) {
+    public TileSetData(TileSetData toCopy) {
         rows = new List<TileDataColumn>(toCopy.rows);
         height = toCopy.height;
         width = toCopy.width;
