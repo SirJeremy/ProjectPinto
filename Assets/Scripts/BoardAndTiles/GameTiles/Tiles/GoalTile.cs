@@ -2,13 +2,14 @@
 
 public class GoalTile : GameTile {
     private void OnEnable() {
-        EventManager.OnPlayerLocationChange += OnPlayerLocationChange;
+        EventManager.OnPlayerStopLocation += OnPlayerStopLocation;
     }
     private void OnDisable() {
-        EventManager.OnPlayerLocationChange -= OnPlayerLocationChange;
+        EventManager.OnPlayerStopLocation -= OnPlayerStopLocation;
     }
 
-    private void OnPlayerLocationChange(IndexVector location) {
+    private void OnPlayerStopLocation(IndexVector location) {
+        //Location is from GameTile
         if(Location == location)
             GoalReached();
     }
