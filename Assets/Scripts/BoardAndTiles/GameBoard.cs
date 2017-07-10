@@ -28,6 +28,7 @@ public class GameBoard {
             }
         }
         //Set player starting position
+        currentPlayerPosition = startingPosition;
         board[startingPosition.X, startingPosition.Y].IsOccupiedByPlayer = true;
     }
     #endregion

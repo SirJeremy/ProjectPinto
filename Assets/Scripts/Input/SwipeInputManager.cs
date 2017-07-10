@@ -82,7 +82,7 @@ public class SwipeInputManager : MonoSingleton<SwipeInputManager> {
         //Debug.Log(touch.phase + ",   " + touch.deltaPosition.magnitude + ",   " + Screen.dpi + "   =   "  + GetDistanceSwiped(touch.deltaPosition.magnitude, touch.deltaTime, Dpi));
         Vector2 endPosition;
         if(GetEndFudgedPosition(out endPosition)) {
-            Debug.Log(GetDistanceSwiped(Vector2.Distance(StartPosition, endPosition), positionsTime, manualDpi));
+            //Debug.Log(GetDistanceSwiped(Vector2.Distance(StartPosition, endPosition), positionsTime, manualDpi));
             if(GetDistanceSwiped(Vector2.Distance(StartPosition, endPosition), positionsTime, manualDpi) >= swipeThreshhold) {
                 Swipe swipe = new Swipe(StartPosition, endPosition);
                 Debug.Log("Swipe successful  " + swipe.ToString());

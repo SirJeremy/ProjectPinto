@@ -25,6 +25,8 @@ public class BoardTile {
     public BoardTile(ETile tileType, IndexVector location) {
         this.tileType = tileType;
         this.location = location;
+        //rather than creating another bool canChangeTraversability,
+        //isSubscribed is used instead since they will have the same value and isSubsribed will be used outside fo the constructor, unlike canChangeTraversability
         gameTile = GameTileSpawner.SpawnGameTile(tileType, location, out isTraversable, out isSubscribed);
         if(isSubscribed) 
             EventManager.OnTraversabilityChange += ChangeTraversability;
