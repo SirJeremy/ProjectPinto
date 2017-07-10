@@ -26,6 +26,11 @@ public class TileData {
             rows.Add(new TileDataColumn(this.height));
         }
     }
+    public TileData(TileData toCopy) {
+        rows = new List<TileDataColumn>(toCopy.rows);
+        height = toCopy.height;
+        width = toCopy.width;
+    }
 
     public void UpdateTableSize(int newWidth, int newHeight) {
         //clamp min of new width and height to 1
