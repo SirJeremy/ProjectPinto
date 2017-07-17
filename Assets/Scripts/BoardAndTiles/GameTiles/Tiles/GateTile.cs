@@ -1,12 +1,7 @@
 ﻿using UnityEngine;
 public class GateTile : GameTile {
-    [SerializeField]
-    private EColor colorChannel = EColor.BLUE;
-
-    private Renderer rend = null;
-
     private void Start() {
-        SetRenderer();
+        SetRenderer(!IsTraverseable);
     }
     private void OnEnable() {
         EventManager.OnButtonDown += OnButtonDown;
@@ -23,12 +18,8 @@ public class GateTile : GameTile {
     private void ChangeTraversability() {
         Debug.Log(IsTraverseable + "  ");
         IsTraverseable = !IsTraverseable;
-        SetRenderer();
+        SetRenderer(!IsTraverseable);
         EventManager.AnnounceOnTraversabilityChange(Location, IsTraverseable);
     }
-    private void SetRenderer() {
-        if(rend == null)
-            rend = GetComponent<Renderer>();
-        rend.enabled = !IsTraverseable;
-    }
+    
 }

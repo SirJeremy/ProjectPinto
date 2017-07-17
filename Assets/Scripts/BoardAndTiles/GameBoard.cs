@@ -17,14 +17,14 @@ public class GameBoard {
     //  x:0y:1   x:1y:1
     //  x:0y:0   x:1y:0
     // in game, y is substituted for z
-    public GameBoard(ETile[,] tiles, IndexVector startingPosition) {
+    public GameBoard(TileSetData tiles, IndexVector startingPosition) {
         //Create Board
-        boardWidth = tiles.GetLength(0);
-        boardHeight = tiles.GetLength(1);
+        boardWidth = tiles.width;
+        boardHeight = tiles.height;
         board = new BoardTile[boardWidth, boardHeight];
         for(int i = 0; i < boardWidth; i++) {
             for(int j = 0; j < boardHeight; j++) {
-                board[i, j] = new BoardTile(tiles[i, j], new IndexVector(i, j));
+                board[i, j] = new BoardTile(tiles.rows[i].column[j].type, tiles.rows[i].column[j].color, new IndexVector(i, j));
             }
         }
         //Set player starting position
@@ -40,7 +40,7 @@ public class GameBoard {
                 board[i, j].DestroyTile();
             }
         }
-        board = null; //is neccessary?
+        board = null;
     }
     public bool CanMoveInDirection(EDirection direction) {
         switch(direction) {

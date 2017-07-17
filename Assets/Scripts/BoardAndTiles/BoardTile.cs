@@ -6,6 +6,7 @@ public class BoardTile {
     private bool playerIsMovingIn = false;
     private bool isTraversable = true;
     private ETile tileType = ETile.EMPTY;
+    //private EColor color = EColor.DEFAULT;
     private IndexVector location = IndexVector.Zero;
     private GameObject gameTile = null;
 
@@ -22,12 +23,14 @@ public class BoardTile {
     #endregion
 
     #region Constructor
-    public BoardTile(ETile tileType, IndexVector location) {
+    public BoardTile(ETile tileType, EColor color, IndexVector location) {
         this.tileType = tileType;
+        //this.color = color;
         this.location = location;
+
         //rather than creating another bool canChangeTraversability,
-        //isSubscribed is used instead since they will have the same value and isSubsribed will be used outside fo the constructor, unlike canChangeTraversability
-        gameTile = GameTileSpawner.SpawnGameTile(tileType, location, out isTraversable, out isSubscribed);
+        //isSubscribed is used instead since they will have the same value and isSubsribed will be used outside of the constructor, unlike canChangeTraversability
+        gameTile = GameTileSpawner.SpawnGameTile(tileType, color, location, out isTraversable, out isSubscribed);
         if(isSubscribed) 
             EventManager.OnTraversabilityChange += ChangeTraversability;
     }

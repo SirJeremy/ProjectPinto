@@ -2,7 +2,8 @@
 
 [CreateAssetMenu(fileName = "NewLevelSet", menuName = "Custom/Level Set")]
 public class LevelSet : ScriptableObject {
-    public BoardTileSet[] levels = new BoardTileSet[0];
+    [SerializeField]
+    private BoardTileSet[] levels = new BoardTileSet[0];
 
     public BoardTileSet GetLevel(int levelIndex) {
         if(levelIndex < 0) {

@@ -3,7 +3,7 @@ using UnityEditor;
 
 public class BoardTileSetEditorWindow : EditorWindow {
     public Object objTS = null;
-    public BoardTileSet tileSet = null;
+    public BoardTileSet boardTileSet = null;
     public int width = 2;
     public int height = 3;
     public TileSetData tiles = null;
@@ -22,7 +22,7 @@ public class BoardTileSetEditorWindow : EditorWindow {
         objTS = EditorGUILayout.ObjectField("Tile Set", objTS, typeof(BoardTileSet), false);
 
         if(objTS != null) {
-            tileSet = (BoardTileSet)objTS;
+            boardTileSet = (BoardTileSet)objTS;
 
             EditorGUILayout.BeginHorizontal();
             if(GUILayout.Button("Load Size"))
@@ -35,20 +35,26 @@ public class BoardTileSetEditorWindow : EditorWindow {
 
             EditorGUILayout.BeginHorizontal();
             GUILayout.Label("Player Starting Position ");
-            int tmp = EditorGUILayout.IntField("X:", tileSet.playerStartingPosition.X);
-            tileSet.playerStartingPosition = new IndexVector(tmp, EditorGUILayout.IntField("Y:", tileSet.playerStartingPosition.Y));
+            int tmp = EditorGUILayout.IntField("X:", boardTileSet.playerStartingPosition.X);
+            boardTileSet.playerStartingPosition = new IndexVector(tmp, EditorGUILayout.IntField("Y:", boardTileSet.playerStartingPosition.Y));
             EditorGUILayout.EndHorizontal();
 
             GUILayout.Label("Note: (0,0) is the bottom left. X+ is right and Y+ is up.");
 
-            tiles = tileSet.tiles;
+            tiles = boardTileSet.tiles;
             if(tiles != null) {
                 for(int y = tiles.height - 1; y >= 0; y--) {
                     EditorGUILayout.BeginHorizontal();
                     for(int x = 0; x < tiles.width; x++) {
-                        tiles.rows[x].column[y] = (ETile)EditorGUILayout.EnumPopup(tiles.rows[x].column[y]);
+                        tiles.rows[x].column[y].type = (ETile)EditorGUILayout.EnumPopup(tiles.rows[x].column[y].type);
                     }
                     EditorGUILayout.EndHorizontal();
+                    EditorGUILayout.BeginHorizontal();
+                    for(int x = 0; x < tiles.width; x++) {
+                        tiles.rows[x].column[y].color = (EColor)EditorGUILayout.EnumPopup(tiles.rows[x].column[y].color);
+                    }
+                    EditorGUILayout.EndHorizontal();
+                    EditorGUILayout.Space();
                 }
             }
         }

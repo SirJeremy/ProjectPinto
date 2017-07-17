@@ -1,11 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+
 [System.Serializable]
 public class TileSetData {
     public int height = 2;
     public int width = 2;
     public List<TileDataColumn> rows;
 
+    #region Constructors
     public TileSetData(int width, int height) {
         //initailize list
         rows = new List<TileDataColumn>();
@@ -31,6 +33,7 @@ public class TileSetData {
         height = toCopy.height;
         width = toCopy.width;
     }
+    #endregion
 
     public void UpdateTableSize(int newWidth, int newHeight) {
         //clamp min of new width and height to 1
@@ -86,37 +89,20 @@ public class TileSetData {
         width = newWidth;
     }
 
-    public ETile[,] To2DArray() {
-        if(width != rows.Count) {
-            Debug.Log("Width size is not the same! " + width + "  " + rows.Count);
-            return null;
-        }
-        ETile[,] array = new ETile[width, height];
-        for(int i = 0; i < width; i++) {
-            if(height != rows[i].column.Count) {
-                Debug.Log("Height size is not the same! " + height + "  " + rows[i].column.Count);
-                return null;
-            }
-            for(int j = 0; j < height; j++) {
-                array[i,j] = rows[i].column[j];
-            }
-        }
-        return array;
-    }
 }
 
 [System.Serializable]
 public class TileDataColumn {
-    public List<ETile> column;
+    public List<TileData> column;
 
     public TileDataColumn(int height) {
         if(height < 0)
             height = 1;
-        column = new List<ETile>();
+        column = new List<TileData>();
         if(height > column.Capacity)
             column.Capacity = height;
         for(int i = 0; i < height; i++) {
-            column.Add(ETile.EMPTY);
+            column.Add(new TileData());
         }
     }
 
@@ -131,7 +117,7 @@ public class TileDataColumn {
                 column.Capacity = height;
             //add column items for the amount of difference
             for(int i = 0; i < difference; i++) {
-                column.Add(ETile.EMPTY);
+                column.Add(new TileData());
             }
         }
         else if(difference < 0) { //else if difference is negative

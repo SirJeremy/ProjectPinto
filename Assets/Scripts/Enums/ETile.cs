@@ -1,11 +1,7 @@
 ﻿public enum ETile {
-    EMPTY,
-    WALL,
-    GOAL,
-    GATE_BLUE,
-    GATE_RED,
-    GATE_YELLOW,
-    BUTTON_BLUE,
-    BUTTON_RED,
-    BUTTON_YELLOW
+    EMPTY = 0,
+    WALL = 1,
+    GOAL = 2,
+    GATE = 3,
+    BUTTON = 4
 };
