@@ -19,35 +19,21 @@ public static class GameTileSpawner {
     }
 
     private static void InitializePrefabs() {
-        string basePath = "Prefabs/GameTiles/";
-        string empty = "Empty";
-        string wall = "Wall";
-        string goal = "Goal";
+        GameTileSet gts;
+        string path = "GameTiles";
 
-        string buttonsRoot = "Buttons/";
-        string buttonBlue = "ButtonBlue";
-        string buttonRed = "ButtonRed";
-        string buttonYellow = "ButtonYellow";
-
-        string gatesRoot = "Gates/";
-        string gateBlue = "GateBlue"; ;
-        string gateRed = "GateRed";
-        string gateYellow = "GateYellow";
+        gts = Resources.Load<GameTileSet>(path);
 
         if(prefabs == null)
             prefabs = new Dictionary<ETile, GameObject>();
 
-        prefabs.Add(ETile.EMPTY, Resources.Load<GameObject>(basePath + empty));
-        prefabs.Add(ETile.WALL, Resources.Load<GameObject>(basePath + wall));
-        prefabs.Add(ETile.GOAL, Resources.Load<GameObject>(basePath + goal));
-        prefabs.Add(ETile.BUTTON_BLUE, Resources.Load<GameObject>(basePath + buttonsRoot + buttonBlue));
-        prefabs.Add(ETile.BUTTON_RED, Resources.Load<GameObject>(basePath + buttonsRoot + buttonRed));
-        prefabs.Add(ETile.BUTTON_YELLOW, Resources.Load<GameObject>(basePath + buttonsRoot + buttonYellow));
-        prefabs.Add(ETile.GATE_BLUE, Resources.Load<GameObject>(basePath + gatesRoot + gateBlue));
-        prefabs.Add(ETile.GATE_RED, Resources.Load<GameObject>(basePath + gatesRoot + gateRed));
-        prefabs.Add(ETile.GATE_YELLOW, Resources.Load<GameObject>(basePath + gatesRoot + gateYellow));
+        prefabs.Add(ETile.EMPTY, gts.GetPrefab(ETile.EMPTY));
+        prefabs.Add(ETile.WALL, gts.GetPrefab(ETile.WALL));
+        prefabs.Add(ETile.GOAL, gts.GetPrefab(ETile.GOAL));
+        prefabs.Add(ETile.BUTTON, gts.GetPrefab(ETile.BUTTON));
+        prefabs.Add(ETile.GATE, gts.GetPrefab(ETile.GATE));
     }
-    public static GameObject SpawnGameTile(ETile tile, IndexVector location, out bool isTraverseable, out bool canChangeTraversability) {
+    public static GameObject SpawnGameTile(ETile tile, EColor color, IndexVector location, out bool isTraverseable, out bool canChangeTraversability) {
         GameObject go = Object.Instantiate(prefabs[tile], location.ToVector3, Quaternion.identity, BoardHolder);
         GameTile gt = go.GetComponent<GameTile>();
         go.name = go.name + " " + location.ToString();
@@ -58,8 +44,9 @@ public static class GameTileSpawner {
         }   
         else {
             gt.Location = location;
-            isTraverseable = gt.IsTraverseable;
-            canChangeTraversability = gt.CanChangeTraversability;
+            gt.SetColor(color);
+            isTraverseable = gt.IsTraverseable; //stored in prefab
+            canChangeTraversability = gt.CanChangeTraversability; //stored in prefab
         }
         return go;
     }

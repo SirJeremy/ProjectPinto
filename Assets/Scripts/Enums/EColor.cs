@@ -1,5 +1,6 @@
 ﻿public enum EColor {
-    BLUE,
-    YELLOW,
-    RED
+    DEFAULT = 0,
+    BLUE = 1,
+    YELLOW = 2,
+    RED = 3
 }
