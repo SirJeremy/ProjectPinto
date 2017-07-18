@@ -2,6 +2,7 @@
 public class GameBoard {
     #region Variables
     private BoardTile[,] board;
+    private GameObject border;
     private int boardWidth = 0;
     private int boardHeight = 0;
     private IndexVector currentPlayerPosition = IndexVector.Zero;
@@ -27,6 +28,8 @@ public class GameBoard {
                 board[i, j] = new BoardTile(tiles.rows[i].column[j].type, tiles.rows[i].column[j].color, new IndexVector(i, j));
             }
         }
+        //Spawn Boarder
+        border = GameTileSpawner.SpawnGameBoardBorder(boardWidth, boardHeight);
         //Set player starting position
         currentPlayerPosition = startingPosition;
         board[startingPosition.X, startingPosition.Y].IsOccupiedByPlayer = true;
@@ -41,6 +44,8 @@ public class GameBoard {
             }
         }
         board = null;
+        Object.Destroy(border);
+        border = null;
     }
     public bool CanMoveInDirection(EDirection direction) {
         switch(direction) {
