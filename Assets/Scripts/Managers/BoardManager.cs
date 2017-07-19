@@ -32,6 +32,7 @@ public class BoardManager : MonoSingleton<BoardManager> {
             gameBoard = new GameBoard(tiles, playerStartingLocation);
             playerInstance = Player.SpawnPlayer(playerStartingLocation);
             hasLevelSpawned = true;
+            CameraFocus.Instance.FocusCamera(gameBoard.Width, gameBoard.Height);
         }
     }
     public void DestroyLevel() {
