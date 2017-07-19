@@ -12,6 +12,7 @@ public class GameBoard {
     public BoardTile[,] Board { get { return board; } }
     public int Width { get { return width; } }
     public int Height { get { return height; } }
+    public IndexVector CurrentPlayerPosition { get { return currentPlayerPosition; } }
     #endregion
 
     #region Constructors
