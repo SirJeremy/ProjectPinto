@@ -3,13 +3,15 @@ public class GameBoard {
     #region Variables
     private BoardTile[,] board;
     private GameObject border;
-    private int boardWidth = 0;
-    private int boardHeight = 0;
+    private int width = 0;
+    private int height = 0;
     private IndexVector currentPlayerPosition = IndexVector.Zero;
     #endregion
 
     #region Properties
     public BoardTile[,] Board { get { return board; } }
+    public int Width { get { return width; } }
+    public int Height { get { return height; } }
     #endregion
 
     #region Constructors
@@ -20,16 +22,16 @@ public class GameBoard {
     // in game, y is substituted for z
     public GameBoard(TileSetData tiles, IndexVector startingPosition) {
         //Create Board
-        boardWidth = tiles.width;
-        boardHeight = tiles.height;
-        board = new BoardTile[boardWidth, boardHeight];
-        for(int i = 0; i < boardWidth; i++) {
-            for(int j = 0; j < boardHeight; j++) {
+        width = tiles.width;
+        height = tiles.height;
+        board = new BoardTile[width, height];
+        for(int i = 0; i < width; i++) {
+            for(int j = 0; j < height; j++) {
                 board[i, j] = new BoardTile(tiles.rows[i].column[j].type, tiles.rows[i].column[j].color, new IndexVector(i, j));
             }
         }
         //Spawn Boarder
-        border = GameTileSpawner.SpawnGameBoardBorder(boardWidth, boardHeight);
+        border = GameTileSpawner.SpawnGameBoardBorder(width, height);
         //Set player starting position
         currentPlayerPosition = startingPosition;
         board[startingPosition.X, startingPosition.Y].IsOccupiedByPlayer = true;
@@ -38,8 +40,8 @@ public class GameBoard {
 
     #region Methods
     public void DestroyBoard() {
-        for(int i = 0; i < boardWidth; i++) {
-            for(int j = 0; i < boardHeight; j++) {
+        for(int i = 0; i < width; i++) {
+            for(int j = 0; i < height; j++) {
                 board[i, j].DestroyTile();
             }
         }
@@ -50,7 +52,7 @@ public class GameBoard {
     public bool CanMoveInDirection(EDirection direction) {
         switch(direction) {
             case EDirection.UP:
-                if(currentPlayerPosition.Y < boardHeight - 1) {
+                if(currentPlayerPosition.Y < height - 1) {
                     IndexVector destination = currentPlayerPosition + GetDirection(direction);
                     return board[destination.X, destination.Y].IsTraversable;
                 }
@@ -68,7 +70,7 @@ public class GameBoard {
                 }
                 return false;
             case EDirection.RIGHT:
-                if(currentPlayerPosition.X < boardWidth - 1) {
+                if(currentPlayerPosition.X < width - 1) {
                     IndexVector destination = currentPlayerPosition + GetDirection(direction);
                     return board[destination.X, destination.Y].IsTraversable;
                 }
