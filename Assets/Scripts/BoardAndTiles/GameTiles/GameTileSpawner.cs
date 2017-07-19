@@ -56,6 +56,9 @@ public static class GameTileSpawner {
         float extra = 25; //number of units the border extends extra
         float widthNorm = 1 / (boardWidth + extra);
         float heightNorm = 1 / (boardHeight + extra);
+        Vector3[] verts;
+        Vector2[] uvs;
+        int[] tris;
         //Create GameObject
         border = new GameObject("Border");
         //Add components
@@ -69,23 +72,32 @@ public static class GameTileSpawner {
         border.transform.position = new Vector3(-.5f, .5f, -.5f);
         //Get mesh ref
         mesh = border.GetComponent<MeshFilter>().mesh;
-        mesh.Clear();
         //Create verts
-        mesh.vertices = new Vector3[] { /* v1:0, v2:right, v3:up, v4:right-up  */
+        verts = new Vector3[] { 
             /* Outer verts (0) */ new Vector3(-extra, 0, -extra), new Vector3(boardWidth + extra, 0, -extra), new Vector3(-extra, 0, boardHeight + extra), new Vector3(boardWidth + extra, 0, boardHeight + extra),
-            /* Inner verts (4) */ Vector3.zero, new Vector3(boardWidth, 0, 0), new Vector3(0, 0, boardHeight), new Vector3(boardWidth, 0, boardHeight),
-            /* Lower verts (8) */ Vector3.down, new Vector3(boardWidth, -1, 0), new Vector3(0, -1, boardHeight), new Vector3(boardWidth, -1, boardHeight)
+            /* Ivert 0 (4) */ Vector3.zero, Vector3.zero, Vector3.zero,
+            /* Ivert x (7) */ new Vector3(boardWidth, 0, 0), new Vector3(boardWidth, 0, 0), new Vector3(boardWidth, 0, 0), 
+            /* Ivert y (10) */ new Vector3(0, 0, boardHeight), new Vector3(0, 0, boardHeight), new Vector3(0, 0, boardHeight), 
+            /* Ivert xy (13) */ new Vector3(boardWidth, 0, boardHeight), new Vector3(boardWidth, 0, boardHeight), new Vector3(boardWidth, 0, boardHeight), 
+            /* Lvert 0 (16) */ Vector3.down, Vector3.down, Vector3.down, 
+            /* Lvert x (19) */ new Vector3(boardWidth, -1, 0), new Vector3(boardWidth, -1, 0), new Vector3(boardWidth, -1, 0), 
+            /* Lvert y (22) */ new Vector3(0, -1, boardHeight), new Vector3(0, -1, boardHeight), new Vector3(0, -1, boardHeight), 
+            /* Lvert xy (25) */ new Vector3(boardWidth, -1, boardHeight), new Vector3(boardWidth, -1, boardHeight), new Vector3(boardWidth, -1, boardHeight), 
         };
         //Set uvs
-        mesh.uv = new Vector2[12];
-        for(int i = 0; i < 12; i++) {
-            mesh.uv[i] = new Vector2((mesh.vertices[i].x + extra + boardWidth) * widthNorm, (mesh.vertices[i].z + extra + boardHeight)* heightNorm);
+        uvs = new Vector2[28];
+        for(int i = 0; i < 28; i++) {
+            uvs[i] = new Vector2((verts[i].x + extra + boardWidth) * widthNorm, (verts[i].z + extra + boardHeight)* heightNorm);
         }
         //Set triangles vert tri-pair via i of verticies
-        mesh.triangles = new int[] { /*Outer left*/ 4, 0, 2, 4, 2, 6, /*Outer up*/ 6, 2, 3, 6, 3, 7, /*Outer right*/ 7, 3, 1, 7, 1, 5, /*Outer down*/ 5, 1, 0, 5, 0, 4,
-            /*Inner left*/ 8, 4, 6, 8, 6, 10, /*Inner up*/ 10, 6, 7, 10, 7, 11, /*Inner right*/ 11, 7, 5, 11, 5, 9, /*Inner down*/ 9, 5, 4, 9, 4, 8,
-            /*center*/ 8, 10, 11, 8, 11, 9
+        tris = new int[] { /*Outer left*/ 4,0,2,4,2,10, /*Outer up*/ 10,2,3,10,3,13, /*Outer right*/ 13,3,1,13,1,7, /*Outer down*/ 7,1,0,7,0,4,
+            /*Inner left*/ 16,5,12,16,12,22, /*Inner up*/ 23,11,15,23,15,25, /*Inner right*/ 26,14,9,26,9,20, /*Inner down*/ 19,8,6,19,6,17,
+            /*center*/ 18,24,27,18,27,21
         };
+        mesh.Clear();
+        mesh.vertices = verts;
+        mesh.uv = uvs;
+        mesh.triangles = tris;
         mesh.RecalculateBounds();
         mesh.RecalculateNormals();
         mesh.RecalculateTangents();
