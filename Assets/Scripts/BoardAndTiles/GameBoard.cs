@@ -42,7 +42,7 @@ public class GameBoard {
     #region Methods
     public void DestroyBoard() {
         for(int i = 0; i < width; i++) {
-            for(int j = 0; i < height; j++) {
+            for(int j = 0; j < height; j++) {
                 board[i, j].DestroyTile();
             }
         }

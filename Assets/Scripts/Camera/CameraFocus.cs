@@ -18,7 +18,7 @@ public class CameraFocus : MonoSingleton<CameraFocus> {
         float w;
         if(bufferBottomScreen) //if the level contains ui buttons, add a buffer to the bottom so that the buttons dont overlap the level
             bufferHeight = (boardHeight / (1 - bottomScreenBuffer)) * bottomScreenBuffer;
-        focus = new Vector3(boardWidth / 2 - .5f, .5f, (boardHeight - bufferHeight) / 2 - .5f);
+        focus = new Vector3((float)boardWidth / 2 - .5f, .5f, ((float)boardHeight - bufferHeight) / 2 - .5f);
         //calculate distance from a frustrum cross section with height and width of the board as the height then see which is bigger and use that distance
         //basically fit the board in the view with both the width and height fitting into view
         h = (boardHeight + borderHeightSpace * 2 + bufferHeight) * .5f / Mathf.Tan(Cam.fieldOfView * .5f * Mathf.Deg2Rad);
