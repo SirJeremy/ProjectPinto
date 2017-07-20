@@ -6,6 +6,7 @@ public class BoardTileSetEditorWindow : EditorWindow {
     public BoardTileSet boardTileSet = null;
     public int width = 2;
     public int height = 3;
+    public int numberUIB = 0;
     public TileSetData tiles = null;
 
     [MenuItem("Window/Custom/Tile Set Editor")]
@@ -23,7 +24,9 @@ public class BoardTileSetEditorWindow : EditorWindow {
 
         if(objTS != null) {
             boardTileSet = (BoardTileSet)objTS;
+            numberUIB = boardTileSet.hasUIButtons ? boardTileSet.uiButtonColors.Length : 0;
 
+            //Size row
             EditorGUILayout.BeginHorizontal();
             if(GUILayout.Button("Load Size"))
                 LoadTileSetSize();
@@ -33,10 +36,27 @@ public class BoardTileSetEditorWindow : EditorWindow {
                 ChangeTileSetSize();
             EditorGUILayout.EndHorizontal();
 
+            //Player starting position row
             EditorGUILayout.BeginHorizontal();
             GUILayout.Label("Player Starting Position ");
             int tmp = EditorGUILayout.IntField("X:", boardTileSet.playerStartingPosition.X);
             boardTileSet.playerStartingPosition = new IndexVector(tmp, EditorGUILayout.IntField("Y:", boardTileSet.playerStartingPosition.Y));
+            EditorGUILayout.EndHorizontal();
+
+            //UIButtons row
+            EditorGUILayout.BeginHorizontal();
+            numberUIB = Mathf.Clamp(EditorGUILayout.DelayedIntField("Number of UI Buttons", numberUIB), 0, 3);
+            if(numberUIB == 0) {
+                boardTileSet.hasUIButtons = false;
+            }
+            else {
+                boardTileSet.hasUIButtons = true;
+                if(boardTileSet.uiButtonColors.Length != numberUIB)
+                    boardTileSet.uiButtonColors = new EColor[numberUIB];
+                for(int i = 0; i < numberUIB; i++) {
+                    boardTileSet.uiButtonColors[i] = (EColor)EditorGUILayout.EnumPopup(boardTileSet.uiButtonColors[i]);
+                }
+            }
             EditorGUILayout.EndHorizontal();
 
             GUILayout.Label("Note: (0,0) is the bottom left. X+ is right and Y+ is up.");
