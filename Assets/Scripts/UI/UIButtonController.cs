@@ -26,10 +26,19 @@ public class UIButtonController : MonoBehaviour {
         public EColor eColor = EColor.DEFAULT;
         public Color color = Color.white;
     }
+
     [SerializeField]
     private ButtonSwitch[] buttons = new ButtonSwitch[3];
     [SerializeField]
     private ColorPair[] colorPairs = new ColorPair[3];
+
+
+    private void OnEnable() {
+        EventManager.OnUIButtonControllerInitialize += OnUIButtonControllerInitialize;
+    }
+    private void OnDisable() {
+        EventManager.OnUIButtonControllerInitialize -= OnUIButtonControllerInitialize;
+    }
 
     public void OnButtonPress(int buttonID) {
         buttonID = Mathf.Clamp(buttonID, 0, buttons.Length - 1);

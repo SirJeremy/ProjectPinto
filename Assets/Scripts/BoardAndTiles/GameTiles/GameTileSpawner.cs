@@ -50,7 +50,7 @@ public static class GameTileSpawner {
         }
         return go;
     }
-    public static GameObject SpawnGameBoardBorder(int boardWidth, int  boardHeight) {
+    public static GameObject SpawnGameBoardBorder(int boardWidth, int  boardHeight) { //creates and returns a go that surrounds the game board
         GameObject border;
         Mesh mesh;
         float extra = 25; //number of units the border extends extra
@@ -68,28 +68,30 @@ public static class GameTileSpawner {
         border.transform.parent = BoardHolder;
         //Set material
         border.GetComponent<Renderer>().material = Resources.Load<Material>("Materials/Border");
+        //turn off shawdows (A S T E T I C S)
+        border.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
         //Offset position to make verts nicer to calc (no .5 ofset for all verts)
         border.transform.position = new Vector3(-.5f, .5f, -.5f);
         //Get mesh ref
         mesh = border.GetComponent<MeshFilter>().mesh;
         //Create verts
         verts = new Vector3[] { 
-            /* Outer verts (0) */ new Vector3(-extra, 0, -extra), new Vector3(boardWidth + extra, 0, -extra), new Vector3(-extra, 0, boardHeight + extra), new Vector3(boardWidth + extra, 0, boardHeight + extra),
-            /* Ivert 0 (4) */ Vector3.zero, Vector3.zero, Vector3.zero,
-            /* Ivert x (7) */ new Vector3(boardWidth, 0, 0), new Vector3(boardWidth, 0, 0), new Vector3(boardWidth, 0, 0), 
-            /* Ivert y (10) */ new Vector3(0, 0, boardHeight), new Vector3(0, 0, boardHeight), new Vector3(0, 0, boardHeight), 
-            /* Ivert xy (13) */ new Vector3(boardWidth, 0, boardHeight), new Vector3(boardWidth, 0, boardHeight), new Vector3(boardWidth, 0, boardHeight), 
-            /* Lvert 0 (16) */ Vector3.down, Vector3.down, Vector3.down, 
-            /* Lvert x (19) */ new Vector3(boardWidth, -1, 0), new Vector3(boardWidth, -1, 0), new Vector3(boardWidth, -1, 0), 
-            /* Lvert y (22) */ new Vector3(0, -1, boardHeight), new Vector3(0, -1, boardHeight), new Vector3(0, -1, boardHeight), 
-            /* Lvert xy (25) */ new Vector3(boardWidth, -1, boardHeight), new Vector3(boardWidth, -1, boardHeight), new Vector3(boardWidth, -1, boardHeight), 
+            /* Out-vert (0) */ new Vector3(-extra, 0, -extra), new Vector3(boardWidth + extra, 0, -extra), new Vector3(-extra, 0, boardHeight + extra), new Vector3(boardWidth + extra, 0, boardHeight + extra),
+            /* In-vert 0 (4) */ Vector3.zero, Vector3.zero, Vector3.zero,
+            /* In-vert x (7) */ new Vector3(boardWidth, 0, 0), new Vector3(boardWidth, 0, 0), new Vector3(boardWidth, 0, 0), 
+            /* In-vert y (10) */ new Vector3(0, 0, boardHeight), new Vector3(0, 0, boardHeight), new Vector3(0, 0, boardHeight), 
+            /* In-vert xy (13) */ new Vector3(boardWidth, 0, boardHeight), new Vector3(boardWidth, 0, boardHeight), new Vector3(boardWidth, 0, boardHeight), 
+            /* Low-vert 0 (16) */ Vector3.down, Vector3.down, Vector3.down, 
+            /* Low-vert x (19) */ new Vector3(boardWidth, -1, 0), new Vector3(boardWidth, -1, 0), new Vector3(boardWidth, -1, 0), 
+            /* Low-vert y (22) */ new Vector3(0, -1, boardHeight), new Vector3(0, -1, boardHeight), new Vector3(0, -1, boardHeight), 
+            /* Low-vert xy (25) */ new Vector3(boardWidth, -1, boardHeight), new Vector3(boardWidth, -1, boardHeight), new Vector3(boardWidth, -1, boardHeight), 
         };
         //Set uvs
         uvs = new Vector2[28];
         for(int i = 0; i < 28; i++) {
             uvs[i] = new Vector2((verts[i].x + extra + boardWidth) * widthNorm, (verts[i].z + extra + boardHeight)* heightNorm);
         }
-        //Set triangles vert tri-pair via i of verticies
+        //Set triangles vert tri-pair via i of verticies (grouped in quads)
         tris = new int[] { /*Outer left*/ 4,0,2,4,2,10, /*Outer up*/ 10,2,3,10,3,13, /*Outer right*/ 13,3,1,13,1,7, /*Outer down*/ 7,1,0,7,0,4,
             /*Inner left*/ 16,5,12,16,12,22, /*Inner up*/ 23,11,15,23,15,25, /*Inner right*/ 26,14,9,26,9,20, /*Inner down*/ 19,8,6,19,6,17,
             /*center*/ 18,24,27,18,27,21
