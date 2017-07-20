@@ -80,6 +80,10 @@ public class BoardTileSetEditorWindow : EditorWindow {
         }
     }
 
+    private void OnLostFocus() {
+        EditorUtility.SetDirty(boardTileSet);
+    }
+
     private void LoadTileSetSize() {
         if(tiles != null)
         width = tiles.width;

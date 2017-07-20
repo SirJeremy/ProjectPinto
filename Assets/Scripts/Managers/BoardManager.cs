@@ -9,6 +9,8 @@ public class BoardManager : MonoSingleton<BoardManager> {
     private int worldIndex = 0;
     [SerializeField]
     private int levelIndex = 0;
+    [SerializeField]
+    private GameObject levelSelect = null;
 
     private GameObject playerInstance;
     private GameBoard gameBoard;
@@ -43,5 +45,13 @@ public class BoardManager : MonoSingleton<BoardManager> {
         Destroy(playerInstance);
         playerInstance = null;
         hasLevelSpawned = false;
+    }
+    public void TMPLevelSelect(int levelIndex) {
+        levelSelect.SetActive(false);
+        SpawnLevel(levelData.GetLevel(0, levelIndex));
+    }
+    public void TMPExitToLevelSelect() {
+        DestroyLevel();
+        levelSelect.SetActive(true);
     }
 }

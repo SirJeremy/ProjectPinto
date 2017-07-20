@@ -85,7 +85,7 @@ public class SwipeInputManager : MonoSingleton<SwipeInputManager> {
             //Debug.Log(GetDistanceSwiped(Vector2.Distance(StartPosition, endPosition), positionsTime, manualDpi));
             if(GetDistanceSwiped(Vector2.Distance(StartPosition, endPosition), positionsTime, manualDpi) >= swipeThreshhold) {
                 Swipe swipe = new Swipe(StartPosition, endPosition);
-                Debug.Log("Swipe successful  " + swipe.ToString());
+                //Debug.Log("Swipe successful  " + swipe.ToString());
                 EventManager.AnnounceOnSwipe(swipe);
             }
         }

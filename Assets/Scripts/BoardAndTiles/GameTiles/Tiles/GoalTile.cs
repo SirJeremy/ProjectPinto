@@ -15,5 +15,6 @@ public class GoalTile : GameTile {
     }
     private void GoalReached() {
         EventManager.AnnounceOnGoalReached();
+        BoardManager.Instance.TMPExitToLevelSelect();
     }
 }
