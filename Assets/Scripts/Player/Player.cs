@@ -11,11 +11,11 @@ public class Player : MonoBehaviour {
 
     #region MonoBehaviours
     private void OnEnable() {
-        EventManager.OnSwipe += OnSwipe;
+        EventManager.OnMoveInput += OnMoveInput;
         EventManager.OnGoalReached += OnGoalReached;
     }
     private void OnDisable() {
-        EventManager.OnSwipe -= OnSwipe;
+        EventManager.OnMoveInput -= OnMoveInput;
         EventManager.OnGoalReached -= OnGoalReached;
     }
     private void OnDestroy() {
@@ -38,12 +38,11 @@ public class Player : MonoBehaviour {
     private void OnGoalReached() {
         canMove = false;
     }
-    private void OnSwipe(Swipe swipe) {
+    private void OnMoveInput(EDirection direction) {
         if(isMoving || !canMove)
             return;
-        EDirection dir = swipe.GetEDirection;
-        if(BoardManager.Instance.GameBoard.CanMoveInDirection(dir))
-            StartCoroutine(Move(dir));
+        if(BoardManager.Instance.GameBoard.CanMoveInDirection(direction))
+            StartCoroutine(Move(direction));
     }
     #endregion
 

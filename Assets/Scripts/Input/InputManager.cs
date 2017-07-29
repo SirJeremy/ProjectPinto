@@ -25,7 +25,7 @@ public class InputManager : MonoSingleton<InputManager> {
     private static HashSet<string> inputHash = null;
     private static EGameState currentGameState = EGameState.NONE; //changed by gameManager
 
-    private static string back = "Back";
+    private static string cancel = "Cancel";
     private static string up = "Up";
     private static string down = "Down";
     private static string left = "Left";
@@ -33,7 +33,7 @@ public class InputManager : MonoSingleton<InputManager> {
     #endregion
 
     #region Properites
-    public static string Back { get { return back; } }
+    public static string Cancel { get { return cancel; } }
     public static string Up { get { return up; } }
     public static string Down { get { return down; } }
     public static string Left { get { return left; } }
@@ -107,7 +107,7 @@ public class InputManager : MonoSingleton<InputManager> {
     }
     private static void InitalizeInputHash() {
         inputHash = new HashSet<string>() {
-            back,
+            cancel,
             up,
             down,
             left,
@@ -171,6 +171,16 @@ public class InputManager : MonoSingleton<InputManager> {
             else
                 AddPosition(touch.position, touch.deltaTime);
         }
+        if(Input.GetButtonDown(Up))
+            EventManager.AnnounceOnMoveInput(EDirection.UP);
+        else if(Input.GetButtonDown(Down))
+            EventManager.AnnounceOnMoveInput(EDirection.DOWN);
+        else if(Input.GetButtonDown(Left))
+            EventManager.AnnounceOnMoveInput(EDirection.LEFT);
+        else if(Input.GetButtonDown(Right))
+            EventManager.AnnounceOnMoveInput(EDirection.RIGHT);
+        if(Input.GetButtonDown(Cancel))
+            EventManager.AnnounceOnCancelInput();
     }
     #endregion
 
@@ -187,7 +197,7 @@ public class InputManager : MonoSingleton<InputManager> {
             if(GetDistanceSwiped(Vector2.Distance(StartPosition, endPosition), positionsTime, manualDpi) >= swipeThreshhold) {
                 Swipe swipe = new Swipe(StartPosition, endPosition);
                 //Debug.Log("Swipe successful  " + swipe.ToString());
-                EventManager.AnnounceOnSwipe(swipe);
+                EventManager.AnnounceOnMoveInput(swipe.GetEDirection);
             }
         }
         positions.Clear();
