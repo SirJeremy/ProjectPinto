@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class MonoSingleton<T> : MonoBehaviour where T : Component {
     //Made by Chris, minor edits by Jeremy
-    private static T instance = null;
+    protected static T instance = null;
     private static bool isQuitting = false;
     public static T Instance
     {
@@ -15,7 +15,6 @@ public class MonoSingleton<T> : MonoBehaviour where T : Component {
             return instance;
         }
     }
-    protected static T RawInstance { get { return instance; } }
 
     static private void FindOrCreateInstance()
     {
@@ -49,7 +48,7 @@ public class MonoSingleton<T> : MonoBehaviour where T : Component {
         if(instance == null) 
         {
             instance = ioc;
-            DontDestroyOnLoad(instance);
+            DontDestroyOnLoad(instance.gameObject);
         }
         else if(instance != ioc) 
         {
