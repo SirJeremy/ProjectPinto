@@ -3,8 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class MonoSingleton<T> : MonoBehaviour where T : Component {
-    //Made by Chris
-    private static T instance = null;
+    //Made by Chris, minor edits by Jeremy
+    protected static T instance = null;
     private static bool isQuitting = false;
     public static T Instance
     {
@@ -21,7 +21,7 @@ public class MonoSingleton<T> : MonoBehaviour where T : Component {
         T[] instanceArray = FindObjectsOfType<T>();
         if(instanceArray.Length == 0)
         {
-            GameObject singleton = new GameObject(string.Empty);
+            GameObject singleton = new GameObject();
             instance = singleton.AddComponent<T>();
             singleton.name = singleton.GetComponent<T>().ToString();
             DontDestroyOnLoad(singleton);
@@ -41,5 +41,38 @@ public class MonoSingleton<T> : MonoBehaviour where T : Component {
     private void OnApplicationQuit()
     {
         isQuitting = true;
+    }
+    protected virtual void Awake() 
+    {
+        T ioc = GetComponent<T>(); //instance of component
+        if(instance == null) 
+        {
+            instance = ioc;
+            DontDestroyOnLoad(instance.gameObject);
+        }
+        else if(instance != ioc) 
+        {
+            Component[] comps = GetComponents<Component>();
+            if(comps.Length == 2) //transform and T, if go doesnt have any other components
+            {
+                if(transform.childCount == 0) //if transform doesn't have any children
+                    Destroy(gameObject);
+                else if(transform.childCount == 1) //if it only has 1 child
+                {
+                    GetComponentInChildren<Transform>().parent = null;
+                    Destroy(gameObject);
+                }
+                else
+                {
+                    name = "Empty " + ioc.ToString() + " (Has Children)";
+                    Destroy(ioc);
+                }
+            }
+            else //has other components
+            {
+                name = name + " (Removed " + ioc.ToString() + ")";
+                Destroy(ioc);
+            }
+        }
     }
 }
