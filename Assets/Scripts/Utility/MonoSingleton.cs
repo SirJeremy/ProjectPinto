@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class MonoSingleton<T> : MonoBehaviour where T : Component {
     //Made by Chris, minor edits by Jeremy
     protected static T instance = null;
-    private static bool isQuitting = false;
+    protected static bool isQuitting = false;
     public static T Instance
     {
         get
@@ -38,7 +38,7 @@ public class MonoSingleton<T> : MonoBehaviour where T : Component {
         }
     }
 
-    private void OnApplicationQuit()
+    protected virtual void OnApplicationQuit()
     {
         isQuitting = true;
     }
