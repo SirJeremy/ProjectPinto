@@ -1,11 +1,14 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(fileName = "NewLevelSet", menuName = "Custom/Level Set")]
-public class LevelSet : ScriptableObject {
+[CreateAssetMenu(fileName = "NewWorldData", menuName = "Custom/World Data")]
+public class WorldData : ScriptableObject {
     [SerializeField]
-    private BoardTileSet[] levels = new BoardTileSet[0];
+    private LevelData[] levels = new LevelData[0];
+    public string worldName = "";
 
-    public BoardTileSet GetLevel(int levelIndex) {
+    public int NumberOfLevels { get { return levels.Length; } }
+
+    public LevelData GetLevel(int levelIndex) {
         if(levelIndex < 0) {
             Debug.LogWarning("LevelIndex (" + levelIndex + ") is less than zero. Retreaving level 0 instead.");
             levelIndex = 0;

@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using UnityEditor;
 
-[CustomEditor(typeof(BoardTileSet))]
-public class BoardTileSetEditor : Editor {
+[CustomEditor(typeof(LevelData))]
+public class LevelDataEditor : Editor {
     public override void OnInspectorGUI() {
         if(GUILayout.Button("Open Editor Window"))
             OpenEditWindow();
@@ -10,6 +10,6 @@ public class BoardTileSetEditor : Editor {
     }
 
     private void OpenEditWindow() {
-        BoardTileSetEditorWindow.ShowWindow();
+        LevelDataEditorWindow.ShowWindow();
     }
 }

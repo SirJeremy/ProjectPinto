@@ -3,12 +3,14 @@
 [CreateAssetMenu(fileName = "NewWorldSet", menuName = "Custom/World Set")]
 public class WorldSet : ScriptableObject {
     [SerializeField]
-    private LevelSet[] worlds = new LevelSet[0];
+    private WorldData[] worlds = new WorldData[0];
 
-    public BoardTileSet GetLevel(int worldIndex, int levelIndex) {
+    public int NumberOfWorlds { get { return worlds.Length; } }
+
+    public LevelData GetLevel(int worldIndex, int levelIndex) {
         return GetWorld(worldIndex).GetLevel(levelIndex);
     }
-    public LevelSet GetWorld(int worldIndex) {
+    public WorldData GetWorld(int worldIndex) {
         if(worldIndex < 0) {
             Debug.LogWarning("WorldIndex (" + worldIndex + ") is less than zero. Retreaving world 0 instead.");
             worldIndex = 0;

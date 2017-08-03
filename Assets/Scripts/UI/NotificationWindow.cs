@@ -19,7 +19,7 @@ public class NotificationWindow : MonoSingleton<NotificationWindow> {
     #endregion
 
     #region Properties
-    public static bool IsShowingNotification { get { return isShowingNotification; } }
+    public static bool IsShowingNotification { get { return isShowingNotification; } private set { isShowingNotification = value; InputManager.IsShowingNotification = value; } }
     #endregion
 
     #region MonoBehviours
@@ -55,7 +55,7 @@ public class NotificationWindow : MonoSingleton<NotificationWindow> {
         gameObject.SetActive(true); //enable the notification UI
         notificationMustBeAnswered = mustBeAnswered; 
         notificationDefaultReturn = defaultReturn;
-        isShowingNotification = true;
+        IsShowingNotification = true;
         returnMethod = callbackMethod; //set the callback method
         //Error check
         if(buttonLabels.Length > 5)
@@ -99,7 +99,7 @@ public class NotificationWindow : MonoSingleton<NotificationWindow> {
         if(returnMethod != null) {
             returnMethod(value);
             returnMethod = null;
-            isShowingNotification = false;
+            IsShowingNotification = false;
             gameObject.SetActive(false);
         }
     }

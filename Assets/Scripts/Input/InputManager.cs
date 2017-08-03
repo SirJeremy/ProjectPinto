@@ -30,6 +30,9 @@ public class InputManager : MonoSingleton<InputManager> {
     private static string down = "Down";
     private static string left = "Left";
     private static string right = "Right";
+
+    private static bool backButtonLeavesApp = true;
+    private static bool isShowingNotification = false;
     #endregion
 
     #region Properites
@@ -38,6 +41,22 @@ public class InputManager : MonoSingleton<InputManager> {
     public static string Down { get { return down; } }
     public static string Left { get { return left; } }
     public static string Right { get { return right; } }
+
+    public static bool BackButtonLeavesApp {
+        get { return backButtonLeavesApp; }
+        set {
+            backButtonLeavesApp = value;
+            Input.backButtonLeavesApp = (backButtonLeavesApp && !NotificationWindow.IsShowingNotification);
+        }
+    }
+    public static bool IsShowingNotification {
+        get { return isShowingNotification; }
+        set {
+            isShowingNotification = value;
+            Input.backButtonLeavesApp = (backButtonLeavesApp && !NotificationWindow.IsShowingNotification);
+        }
+    }
+
     #endregion
 
     #region Methods

@@ -4,6 +4,11 @@ public class LandingMenuNaviagation : MenuNavigation {
     [SerializeField]
     private MenuNavigation levelMenu;
 
+    public override void NavigateTo() {
+        base.NavigateTo();
+        InputManager.BackButtonLeavesApp = true;
+    }
+
     public void OnOtherButtonPress() {
         Debug.Log("Placeholder");
     }
