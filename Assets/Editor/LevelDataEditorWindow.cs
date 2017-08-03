@@ -1,30 +1,35 @@
 ﻿using UnityEngine;
 using UnityEditor;
 
-public class BoardTileSetEditorWindow : EditorWindow {
-    public Object objTS = null;
-    public BoardTileSet boardTileSet = null;
+public class LevelDataEditorWindow : EditorWindow {
+    public Object objLD = null;
+    public LevelData levelData = null;
     public int width = 2;
     public int height = 3;
     public int numberUIB = 0;
     public TileSetData tiles = null;
 
-    [MenuItem("Window/Custom/Tile Set Editor")]
+    [MenuItem("Window/Custom/Level Editor")]
     public static void ShowWindow() {
-        BoardTileSetEditorWindow window = GetWindow<BoardTileSetEditorWindow>("Tile Set Editor");
-        if(Selection.activeObject != null && Selection.activeObject.GetType() == typeof(BoardTileSet))
-            window.objTS = Selection.activeObject;
+        LevelDataEditorWindow window = GetWindow<LevelDataEditorWindow>("Level Editor");
+        if(Selection.activeObject != null && Selection.activeObject.GetType() == typeof(LevelData))
+            window.objLD = Selection.activeObject;
         window.position = new Rect(50, 50, 600, 300);
         window.minSize = new Vector2(600, 100);
         window.Show();
     }
 
     private void OnGUI() {
-        objTS = EditorGUILayout.ObjectField("Tile Set", objTS, typeof(BoardTileSet), false);
+        objLD = EditorGUILayout.ObjectField("Level Data", objLD, typeof(LevelData), false);
 
-        if(objTS != null) {
-            boardTileSet = (BoardTileSet)objTS;
-            numberUIB = boardTileSet.hasUIButtons ? boardTileSet.uiButtonColors.Length : 0;
+        if(objLD != null) {
+            levelData = (LevelData)objLD;
+            numberUIB = levelData.hasUIButtons ? levelData.uiButtonColors.Length : 0;
+
+            //Name row
+            EditorGUILayout.BeginHorizontal();
+            levelData.levelName = EditorGUILayout.TextField("Name ", levelData.levelName);
+            EditorGUILayout.EndHorizontal();
 
             //Size row
             EditorGUILayout.BeginHorizontal();
@@ -39,29 +44,29 @@ public class BoardTileSetEditorWindow : EditorWindow {
             //Player starting position row
             EditorGUILayout.BeginHorizontal();
             GUILayout.Label("Player Starting Position ");
-            int tmp = EditorGUILayout.IntField("X:", boardTileSet.playerStartingPosition.X);
-            boardTileSet.playerStartingPosition = new IndexVector(tmp, EditorGUILayout.IntField("Y:", boardTileSet.playerStartingPosition.Y));
+            int tmp = EditorGUILayout.IntField("X:", levelData.playerStartingPosition.X);
+            levelData.playerStartingPosition = new IndexVector(tmp, EditorGUILayout.IntField("Y:", levelData.playerStartingPosition.Y));
             EditorGUILayout.EndHorizontal();
 
             //UIButtons row
             EditorGUILayout.BeginHorizontal();
             numberUIB = Mathf.Clamp(EditorGUILayout.DelayedIntField("Number of UI Buttons", numberUIB), 0, 3);
             if(numberUIB == 0) {
-                boardTileSet.hasUIButtons = false;
+                levelData.hasUIButtons = false;
             }
             else {
-                boardTileSet.hasUIButtons = true;
-                if(boardTileSet.uiButtonColors.Length != numberUIB)
-                    boardTileSet.uiButtonColors = new EColor[numberUIB];
+                levelData.hasUIButtons = true;
+                if(levelData.uiButtonColors.Length != numberUIB)
+                    levelData.uiButtonColors = new EColor[numberUIB];
                 for(int i = 0; i < numberUIB; i++) {
-                    boardTileSet.uiButtonColors[i] = (EColor)EditorGUILayout.EnumPopup(boardTileSet.uiButtonColors[i]);
+                    levelData.uiButtonColors[i] = (EColor)EditorGUILayout.EnumPopup(levelData.uiButtonColors[i]);
                 }
             }
             EditorGUILayout.EndHorizontal();
 
             GUILayout.Label("Note: (0,0) is the bottom left. X+ is right and Y+ is up.");
 
-            tiles = boardTileSet.tiles;
+            tiles = levelData.tiles;
             if(tiles != null) {
                 for(int y = tiles.height - 1; y >= 0; y--) {
                     EditorGUILayout.BeginHorizontal();
@@ -81,7 +86,7 @@ public class BoardTileSetEditorWindow : EditorWindow {
     }
 
     private void OnLostFocus() {
-        EditorUtility.SetDirty(boardTileSet);
+        EditorUtility.SetDirty(levelData);
     }
 
     private void LoadTileSetSize() {

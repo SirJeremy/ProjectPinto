@@ -14,10 +14,12 @@ public class NotificationWindow : MonoSingleton<NotificationWindow> {
 
     public delegate void NotificationReturn(int value);
     private NotificationReturn returnMethod; //have no idea what to name this
+
+    private static bool isShowingNotification = false;
     #endregion
 
     #region Properties
-    public bool IsShowingNotification { get { return gameObject.activeInHierarchy; } }
+    public static bool IsShowingNotification { get { return isShowingNotification; } private set { isShowingNotification = value; InputManager.IsShowingNotification = value; } }
     #endregion
 
     #region MonoBehviours
@@ -52,7 +54,8 @@ public class NotificationWindow : MonoSingleton<NotificationWindow> {
         //
         gameObject.SetActive(true); //enable the notification UI
         notificationMustBeAnswered = mustBeAnswered; 
-        notificationDefaultReturn = defaultReturn; 
+        notificationDefaultReturn = defaultReturn;
+        IsShowingNotification = true;
         returnMethod = callbackMethod; //set the callback method
         //Error check
         if(buttonLabels.Length > 5)
@@ -83,7 +86,7 @@ public class NotificationWindow : MonoSingleton<NotificationWindow> {
                     buttonTexts[i].text = "I hate bugs! (Taxidermy)"; //default text
                 }
             }
-        }       
+        }
     }
     public void OnButtonPress(int value) {
         SendCallback(value);
@@ -96,6 +99,8 @@ public class NotificationWindow : MonoSingleton<NotificationWindow> {
         if(returnMethod != null) {
             returnMethod(value);
             returnMethod = null;
+            IsShowingNotification = false;
+            gameObject.SetActive(false);
         }
     }
     #endregion

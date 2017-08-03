@@ -20,23 +20,23 @@ public class BoardManager : MonoSingleton<BoardManager> {
 
     private void Start() {
         if(spawnLevelAtStart) {
-            BoardTileSet bts = levelData.GetLevel(worldIndex, levelIndex);
+            LevelData bts = levelData.GetLevel(worldIndex, levelIndex);
             if(bts != null)
                 SpawnLevel(bts);
         }
     }
-    public void SpawnLevel(BoardTileSet bts) {
+    public void SpawnLevel(LevelData ld) {
         if(hasLevelSpawned) {
             Debug.LogWarning("Level is already spawned!");
             return;
         }
-        if(bts.tiles != null) {
-            gameBoard = new GameBoard(bts.tiles, bts.playerStartingPosition);
-            playerInstance = Player.SpawnPlayer(bts.playerStartingPosition);
+        if(ld.tiles != null) {
+            gameBoard = new GameBoard(ld.tiles, ld.playerStartingPosition);
+            playerInstance = Player.SpawnPlayer(ld.playerStartingPosition);
             hasLevelSpawned = true;
-            CameraFocus.Instance.FocusCamera(gameBoard.Width, gameBoard.Height, bts.hasUIButtons);
-            if(bts.hasUIButtons)
-                EventManager.AnnounceOnUIButtonControllerInitialize(bts.uiButtonColors.Length, bts.uiButtonColors);
+            CameraFocus.Instance.FocusCamera(gameBoard.Width, gameBoard.Height, ld.hasUIButtons);
+            if(ld.hasUIButtons)
+                EventManager.AnnounceOnUIButtonControllerInitialize(ld.uiButtonColors.Length, ld.uiButtonColors);
         }
     }
     public void DestroyLevel() {
