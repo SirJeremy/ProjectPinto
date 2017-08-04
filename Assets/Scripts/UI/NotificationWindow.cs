@@ -28,7 +28,7 @@ public class NotificationWindow : MonoSingleton<NotificationWindow> {
             instance = this;
             DontDestroyOnLoad(gameObject);
         }
-        else
+        else if(instance == this)
             Destroy(gameObject);
         gameObject.SetActive(false);
     }

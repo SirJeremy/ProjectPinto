@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class LevelMenuNavigation : MenuNavigation  {
+public class LevelMenu : MenuNavigation  {
     [SerializeField]
     protected MenuNavigation landingMenu;
     [SerializeField]
@@ -13,14 +13,14 @@ public class LevelMenuNavigation : MenuNavigation  {
 
     private GameObject[] levelButtons;
     
-    private bool isInWorldSelect = true;
-    private bool isInGame = false;
+    private bool isInLevelSelect = true;
     private int currentWorldLoaded = -1;
     private int currentWorldSelected = -1;
 
     protected override void Awake() {
         base.Awake();
         PopulateWorldMenu();
+        EventManager.OnGameExit += OnGameExit;
     }
 
     private void PopulateWorldMenu() {
@@ -57,13 +57,13 @@ public class LevelMenuNavigation : MenuNavigation  {
     private void NavigateToWorldSelect() {
         worldParent.SetActive(true);
         levelParent.SetActive(false);
-        isInWorldSelect = true;
+        isInLevelSelect = true;
     }
     private void NavigateToLevelSelect() {
         PopulateLevelMenu(levelData.GetWorld(currentWorldSelected), currentWorldSelected);
         worldParent.SetActive(false);
         levelParent.SetActive(true);
-        isInWorldSelect = false;
+        isInLevelSelect = false;
     }
 
     public void OnWorldButtonClick(int index) {
@@ -71,21 +71,27 @@ public class LevelMenuNavigation : MenuNavigation  {
         NavigateToLevelSelect();
     }
     public void OnLevelButtonClick(int index) {
-        
+        EventManager.AnnounceOnGameEnter();
+        BoardManager.Instance.SpawnLevel(levelData.GetLevel(currentWorldSelected, index));
+        NavigateAway();
     }
 
     public override void NavigateTo() {
         base.NavigateTo();
-        InputManager.BackButtonLeavesApp = true;
+        InputManager.BackButtonLeavesApp = false;
     }
     protected override void OnCancelInput() {
         if(!NotificationWindow.IsShowingNotification) {
-            if(isInWorldSelect) {
+            if(isInLevelSelect) {
                 landingMenu.NavigateTo();
                 NavigateAway();
             }
             else
                 NavigateToWorldSelect();
         }
+    }
+
+    private void OnGameExit() {
+        NavigateTo();
     }
 }

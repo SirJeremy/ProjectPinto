@@ -44,8 +44,12 @@ public class UIButtonController : MonoBehaviour {
         buttonID = Mathf.Clamp(buttonID, 0, buttons.Length - 1);
         buttons[buttonID].AnnounceOnButtonDown();
     }
-    public void OnUIButtonControllerInitialize(int numberOfButtons, EColor[] colors) {
-        int b = Mathf.Clamp(numberOfButtons, 0, buttons.Length);
+    public void OnUIButtonControllerInitialize(EColor[] colors) {
+        int b;
+        if(colors == null)
+            b = 0;
+        else
+            b = Mathf.Clamp(colors.Length, 0, 3);
         //if 0, turn off all buttons
         if(b == 0) {
             foreach(ButtonSwitch bs in buttons) {
