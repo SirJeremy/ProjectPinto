@@ -49,7 +49,6 @@ public class GameBoard {
         board = null;
         Object.Destroy(border);
         border = null;
-        EventManager.AnnounceOnUIButtonControllerInitialize(0, null);
     }
     public bool CanMoveInDirection(EDirection direction) {
         switch(direction) {

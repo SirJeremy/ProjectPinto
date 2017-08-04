@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 
 public class BoardManager : MonoSingleton<BoardManager> {
+    #region Variables
     [SerializeField]
     private WorldSet levelData;
     [SerializeField]
@@ -9,49 +10,64 @@ public class BoardManager : MonoSingleton<BoardManager> {
     private int worldIndex = 0;
     [SerializeField]
     private int levelIndex = 0;
-    [SerializeField]
-    private GameObject levelSelect = null;
 
     private GameObject playerInstance;
     private GameBoard gameBoard;
+    private LevelData currentLevelData; 
     private bool hasLevelSpawned = false;
+    #endregion
 
+    #region Properties
     public GameBoard GameBoard { get { return gameBoard; } }
+    #endregion
 
+    #region MonoBehaviours
+    private void OnEnable() {
+        EventManager.OnGoalReached += OnGoalReached;
+    }
+    private void OnDisable() {
+        EventManager.OnGoalReached -= OnGoalReached;
+    }
     private void Start() {
         if(spawnLevelAtStart) {
-            LevelData bts = levelData.GetLevel(worldIndex, levelIndex);
-            if(bts != null)
-                SpawnLevel(bts);
+            currentLevelData = levelData.GetLevel(worldIndex, levelIndex);
+            if(currentLevelData != null)
+                SpawnLevel(currentLevelData);
         }
     }
-    public void SpawnLevel(LevelData ld) {
+    #endregion
+
+    #region Methods
+    public void SpawnLevel(LevelData levelData) {
         if(hasLevelSpawned) {
             Debug.LogWarning("Level is already spawned!");
             return;
         }
-        if(ld.tiles != null) {
-            gameBoard = new GameBoard(ld.tiles, ld.playerStartingPosition);
-            playerInstance = Player.SpawnPlayer(ld.playerStartingPosition);
+        if(levelData.tiles != null) {
+            currentLevelData = levelData;
+            gameBoard = new GameBoard(levelData.tiles, levelData.playerStartingPosition);
+            playerInstance = Player.SpawnPlayer(levelData.playerStartingPosition);
             hasLevelSpawned = true;
-            CameraFocus.Instance.FocusCamera(gameBoard.Width, gameBoard.Height, ld.hasUIButtons);
-            if(ld.hasUIButtons)
-                EventManager.AnnounceOnUIButtonControllerInitialize(ld.uiButtonColors.Length, ld.uiButtonColors);
+            CameraFocus.Instance.FocusCamera(gameBoard.Width, gameBoard.Height, levelData.hasUIButtons);
+            if(levelData.hasUIButtons)
+                EventManager.AnnounceOnUIButtonControllerInitialize(levelData.uiButtonColors);
         }
     }
-    public void DestroyLevel() {
+    private void DestroyLevel() {
         gameBoard.DestroyBoard();
         gameBoard = null;
         Destroy(playerInstance);
         playerInstance = null;
         hasLevelSpawned = false;
+        EventManager.AnnounceOnUIButtonControllerInitialize(null);
     }
-    public void TMPLevelSelect(int levelIndex) {
-        levelSelect.SetActive(false);
-        SpawnLevel(levelData.GetLevel(0, levelIndex));
+
+    private void OnGoalReached() {
+        NotificationWindow.Instance.ShowNotification(currentLevelData.levelName + " Complete", new string[] { "Back to level select" }, 0, CallbackNotification, true);
     }
-    public void TMPExitToLevelSelect() {
+    private void CallbackNotification(int value) {
         DestroyLevel();
-        levelSelect.SetActive(true);
+        EventManager.AnnounceOnGameExit();
     }
+    #endregion
 }

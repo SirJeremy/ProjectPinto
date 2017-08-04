@@ -6,7 +6,7 @@ public static class EventManager {
     public delegate void DEDirection(EDirection direction);
     public delegate void DIndexVector(IndexVector location);
     public delegate void DEColor(EColor color);
-    public delegate void IntEColorArr(int numberOfButtons, EColor[] colors);
+    public delegate void EColorArr(EColor[] colors);
     #endregion
 
     #region Events
@@ -16,8 +16,10 @@ public static class EventManager {
     public static event DIndexVector OnPlayerStopLocation; //when the player stops on a space (no longer moving)
     public static event Empty OnGoalReached; //when the player reaches the goal
     public static event Empty OnCancelInput; //when the back button is pressed
+    public static event Empty OnGameEnter; //when the player goes from menu to game
+    public static event Empty OnGameExit;  //when the player goes from game to menu
     public static event DEColor OnButtonDown; //when a button is pressed
-    public static event IntEColorArr OnUIButtonControllerInitialize; //used to tell UI button controller to initialize 
+    public static event EColorArr OnUIButtonControllerInitialize; //used to tell UI button controller to initialize 
     #endregion
 
     #region EventCalls
@@ -27,7 +29,9 @@ public static class EventManager {
     public static void AnnounceOnPlayerStopLocation(IndexVector location) { if(OnPlayerStopLocation != null) OnPlayerStopLocation(location); }
     public static void AnnounceOnGoalReached() { if(OnGoalReached != null) OnGoalReached(); }
     public static void AnnounceOnButtonDown(EColor colorChannel) { if(OnButtonDown != null) OnButtonDown(colorChannel); }
-    public static void AnnounceOnUIButtonControllerInitialize(int numberOfButtons, EColor[] colors) { if(OnUIButtonControllerInitialize != null) OnUIButtonControllerInitialize(numberOfButtons, colors); }
+    public static void AnnounceOnUIButtonControllerInitialize(EColor[] colors) { if(OnUIButtonControllerInitialize != null) OnUIButtonControllerInitialize(colors); }
     public static void AnnounceOnCancelInput() { if(OnCancelInput != null && Input.backButtonLeavesApp == false) { OnCancelInput(); } }
+    public static void AnnounceOnGameEnter() { if(OnGameEnter != null) { OnGameEnter(); } }
+    public static void AnnounceOnGameExit() { if(OnGameExit != null) { OnGameExit(); } }
     #endregion
 }
