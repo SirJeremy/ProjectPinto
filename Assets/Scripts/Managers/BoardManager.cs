@@ -51,9 +51,20 @@ public class BoardManager : MonoSingleton<BoardManager> {
             CameraFocus.Instance.FocusCamera(gameBoard.Width, gameBoard.Height, levelData.hasUIButtons);
             if(levelData.hasUIButtons)
                 EventManager.AnnounceOnUIButtonControllerInitialize(levelData.uiButtonColors);
+            else
+                EventManager.AnnounceOnUIButtonControllerInitialize(null);
         }
     }
-    private void DestroyLevel() {
+    public void RestartLevel() {
+        if(hasLevelSpawned) {
+            DestroyLevel();
+            SpawnLevel(currentLevelData);
+        }
+        else {
+            Debug.LogWarning("Cannot restart, level is not spawned!");
+        }
+    }
+    public void DestroyLevel() {
         gameBoard.DestroyBoard();
         gameBoard = null;
         Destroy(playerInstance);

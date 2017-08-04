@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class LevelMenuNavigation : MenuNavigation  {
+public class LevelMenu : MenuNavigation  {
     [SerializeField]
     protected MenuNavigation landingMenu;
     [SerializeField]
@@ -71,6 +71,7 @@ public class LevelMenuNavigation : MenuNavigation  {
         NavigateToLevelSelect();
     }
     public void OnLevelButtonClick(int index) {
+        EventManager.AnnounceOnGameEnter();
         BoardManager.Instance.SpawnLevel(levelData.GetLevel(currentWorldSelected, index));
         NavigateAway();
     }

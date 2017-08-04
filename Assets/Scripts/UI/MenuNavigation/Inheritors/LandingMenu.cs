@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class LandingMenuNaviagation : MenuNavigation {
+public class LandingMenu : MenuNavigation {
     [SerializeField]
     private MenuNavigation levelMenu;
 
