@@ -1,11 +1,15 @@
 ﻿using UnityEngine;
 public class GateTile : GameTile {
+    [SerializeField]
+    private Transform[] hinges = new Transform[4];
+    [SerializeField]
+    private AccelerationVelocityValue avv = new AccelerationVelocityValue();
+
     private bool isOpen = false;
     private bool isWatitingToChange = false;
 
     private void Start() {
         isOpen = IsTraverseable;
-        SetRenderer(!IsTraverseable);
     }
     private void OnEnable() {
         EventManager.OnButtonDown += OnButtonDown;
@@ -37,7 +41,6 @@ public class GateTile : GameTile {
 
     private void ChangeTraversability() {
         IsTraverseable = isOpen;
-        SetRenderer(!IsTraverseable);
         EventManager.AnnounceOnTraversabilityChange(Location, IsTraverseable);
     }
 

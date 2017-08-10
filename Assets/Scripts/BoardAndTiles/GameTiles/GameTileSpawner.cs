@@ -81,20 +81,19 @@ public static class GameTileSpawner {
             /* In-vert x (7) */ new Vector3(boardWidth, 0, 0), new Vector3(boardWidth, 0, 0), new Vector3(boardWidth, 0, 0), 
             /* In-vert y (10) */ new Vector3(0, 0, boardHeight), new Vector3(0, 0, boardHeight), new Vector3(0, 0, boardHeight), 
             /* In-vert xy (13) */ new Vector3(boardWidth, 0, boardHeight), new Vector3(boardWidth, 0, boardHeight), new Vector3(boardWidth, 0, boardHeight), 
-            /* Low-vert 0 (16) */ Vector3.down, Vector3.down, Vector3.down, 
-            /* Low-vert x (19) */ new Vector3(boardWidth, -1, 0), new Vector3(boardWidth, -1, 0), new Vector3(boardWidth, -1, 0), 
-            /* Low-vert y (22) */ new Vector3(0, -1, boardHeight), new Vector3(0, -1, boardHeight), new Vector3(0, -1, boardHeight), 
-            /* Low-vert xy (25) */ new Vector3(boardWidth, -1, boardHeight), new Vector3(boardWidth, -1, boardHeight), new Vector3(boardWidth, -1, boardHeight), 
+            /* Low-vert 0 (16) */ Vector3.down, Vector3.down,
+            /* Low-vert x (18) */ new Vector3(boardWidth, -1, 0), new Vector3(boardWidth, -1, 0), 
+            /* Low-vert y (20) */ new Vector3(0, -1, boardHeight), new Vector3(0, -1, boardHeight), 
+            /* Low-vert xy (22) */ new Vector3(boardWidth, -1, boardHeight), new Vector3(boardWidth, -1, boardHeight),
         };
         //Set uvs
-        uvs = new Vector2[28];
-        for(int i = 0; i < 28; i++) {
+        uvs = new Vector2[24];
+        for(int i = 0; i < 24; i++) {
             uvs[i] = new Vector2((verts[i].x + extra + boardWidth) * widthNorm, (verts[i].z + extra + boardHeight)* heightNorm);
         }
         //Set triangles vert tri-pair via i of verticies (grouped in quads)
         tris = new int[] { /*Outer left*/ 4,0,2,4,2,10, /*Outer up*/ 10,2,3,10,3,13, /*Outer right*/ 13,3,1,13,1,7, /*Outer down*/ 7,1,0,7,0,4,
-            /*Inner left*/ 16,5,12,16,12,22, /*Inner up*/ 23,11,15,23,15,25, /*Inner right*/ 26,14,9,26,9,20, /*Inner down*/ 19,8,6,19,6,17,
-            /*center*/ 18,24,27,18,27,21
+            /*Inner left*/ 16,5,12,16,12,20, /*Inner up*/ 21,11,15,21,15,22, /*Inner right*/ 23,14,9,23,9,19, /*Inner down*/ 18,8,6,18,6,17,
         };
         mesh.Clear();
         mesh.vertices = verts;

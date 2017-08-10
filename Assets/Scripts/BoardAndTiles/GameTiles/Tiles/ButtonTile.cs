@@ -19,7 +19,6 @@ public class ButtonTile : GameTile {
         if(!hasBeenPressed) {
             EventManager.AnnounceOnButtonDown(colorChannel);
             hasBeenPressed = true;
-            SetRenderer(false);
         }
     }
 }
