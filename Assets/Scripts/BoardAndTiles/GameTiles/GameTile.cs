@@ -26,10 +26,4 @@ public class GameTile : MonoBehaviour {
         colorChannel = color;
         Rend.material = ColorChartManager.GetColorMaterial(color);
     }
-
-    protected void SetRenderer(bool isEnabled) {
-        if(Rend == null) //if go doesn not have a renderer
-            return;
-        Rend.enabled = isEnabled;
-    }
 }
