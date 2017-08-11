@@ -17,13 +17,16 @@ public class GameTile : MonoBehaviour {
     public ETile Type { get { return type; } }
     protected Renderer Rend { get { if(rend == null) rend = GetComponent<Renderer>(); return rend; } }
 
-    public virtual void SetColor(EColor color) {
-        if(Rend == null) //if go doesn not have a renderer
-            return;
+    protected virtual void OnDestroy() {
+        StopAllCoroutines();
+    }
 
+    public virtual void SetColor(EColor color) { 
         if(colorChannel == color)
             return;
         colorChannel = color;
-        Rend.material = ColorChartManager.GetColorMaterial(color);
+        if(Rend == null) //if go doesn not have a renderer
+            return;        
+        Rend.material.color = ColorChartManager.GetColorMaterial(color).color;
     }
 }

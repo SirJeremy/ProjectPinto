@@ -38,7 +38,7 @@ public class AccelerationVelocityValue {
         return Increment(Time.deltaTime);
     }
     public float Increment(float deltaTime) {
-        velocity = Mathf.Clamp(velocity + acceleration / deltaTime, minVelocity, maxVelocity);
+        velocity = Mathf.Clamp(velocity + acceleration * deltaTime, minVelocity, maxVelocity);
         value = Mathf.Clamp(value + velocity, minValue, maxValue);
         return value;
     }
@@ -46,9 +46,12 @@ public class AccelerationVelocityValue {
         return Decrement(Time.deltaTime);
     }
     public float Decrement(float deltaTime) {
-        velocity = Mathf.Clamp(velocity - acceleration / deltaTime, minVelocity, maxVelocity);
+        velocity = Mathf.Clamp(velocity - acceleration * deltaTime, minVelocity, maxVelocity);
         value = Mathf.Clamp(value + velocity, minValue, maxValue);
         return value;
+    }
+    public void ResetVelocity() {
+        velocity = 0;
     }
     public void ResetVelocityToMin() {
         velocity = minVelocity;
@@ -61,6 +64,14 @@ public class AccelerationVelocityValue {
     }
     public void ResetValueToMax() {
         value = maxValue;
+    }
+    public void ResetToMin() {
+        ResetVelocity();
+        ResetValueToMin();
+    }
+    public void ResetToMax() {
+        ResetVelocity();
+        ResetValueToMax();
     }
     public void ResetAllToMin() {
         ResetVelocityToMin();
