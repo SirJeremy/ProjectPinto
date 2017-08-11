@@ -1,14 +1,14 @@
 ﻿using UnityEngine;
 
 public static class ColorChartManager {
-    private static MaterialColorChart chart = null;
+    private static ColorChart chart = null;
 
     static ColorChartManager(){
-        string path = "MaterialColorChart";
-        chart = Resources.Load<MaterialColorChart>(path);
+        string path = "ColorChart";
+        chart = Resources.Load<ColorChart>(path);
     }
 
-    public static Material GetColorMaterial(EColor color) {
-        return chart.GetMaterial(color);
+    public static Color GetColorMaterial(EColor color) {
+        return chart.GetColor(color);
     }
 }

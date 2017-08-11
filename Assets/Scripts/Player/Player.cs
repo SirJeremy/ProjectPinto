@@ -60,6 +60,7 @@ public class Player : MonoBehaviour {
         while(true) { 
             //Start of move cycle
             BoardManager.Instance.GameBoard.StartMovePlayer(dir);
+            EventManager.AnnounceOnPlayerStartLocationChange(currentLocation + IndexVector.GetDirection(dir));
             startPoint = currentLocation.ToVector3;
             endPoint = currentLocation.ToVector3 + IndexVector.GetDirection(dir).ToVector3;
             startTime = Time.time;

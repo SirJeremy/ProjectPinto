@@ -12,6 +12,7 @@ public static class EventManager {
     #region Events
     public static event IndexVectorBool OnTraversabilityChange; //when a game tile want to change its isTraversability
     public static event DEDirection OnMoveInput; //when move input occurs
+    public static event DIndexVector OnPlayerStartLocationChange; //when the player start to move to a new space, ie when the player is moving into a square; give the location moving to
     public static event DIndexVector OnPlayerLocationChange; //when the player moves to a new space
     public static event DIndexVector OnPlayerStopLocation; //when the player stops on a space (no longer moving)
     public static event Empty OnGoalReached; //when the player reaches the goal
@@ -25,6 +26,7 @@ public static class EventManager {
     #region EventCalls
     public static void AnnounceOnTraversabilityChange(IndexVector location, bool isTraversable) { if(OnTraversabilityChange != null) OnTraversabilityChange(location, isTraversable); }
     public static void AnnounceOnMoveInput(EDirection direction) { if(OnMoveInput != null) OnMoveInput(direction); }
+    public static void AnnounceOnPlayerStartLocationChange(IndexVector location) { if(OnPlayerStartLocationChange != null) OnPlayerStartLocationChange(location); }
     public static void AnnounceOnPlayerLocationChange(IndexVector location) { if(OnPlayerLocationChange != null) OnPlayerLocationChange(location); }
     public static void AnnounceOnPlayerStopLocation(IndexVector location) { if(OnPlayerStopLocation != null) OnPlayerStopLocation(location); }
     public static void AnnounceOnGoalReached() { if(OnGoalReached != null) OnGoalReached(); }

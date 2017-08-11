@@ -27,11 +27,10 @@ public static class GameTileSpawner {
         if(prefabs == null)
             prefabs = new Dictionary<ETile, GameObject>();
 
-        prefabs.Add(ETile.EMPTY, gts.GetPrefab(ETile.EMPTY));
-        prefabs.Add(ETile.WALL, gts.GetPrefab(ETile.WALL));
-        prefabs.Add(ETile.GOAL, gts.GetPrefab(ETile.GOAL));
-        prefabs.Add(ETile.BUTTON, gts.GetPrefab(ETile.BUTTON));
-        prefabs.Add(ETile.GATE, gts.GetPrefab(ETile.GATE));
+        int length = gts.GameTilePairs.Length;
+        for(int i = 0; i < length; i++) {
+            prefabs.Add(gts.GameTilePairs[i].type, gts.GameTilePairs[i].prefab);
+        }
     }
     public static GameObject SpawnGameTile(ETile tile, EColor color, IndexVector location, out bool isTraverseable, out bool canChangeTraversability) {
         GameObject go = Object.Instantiate(prefabs[tile], location.ToVector3, Quaternion.identity, BoardHolder);
