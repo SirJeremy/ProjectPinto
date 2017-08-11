@@ -3,6 +3,8 @@
 public class ButtonTile : GameTile {
     #region Varaibles
     [SerializeField]
+    new private Renderer renderer = null;
+    [SerializeField]
     private bool canOnlyBePressedOnce = false;
     private bool hasBeenPressed = false;
     #endregion
@@ -16,6 +18,16 @@ public class ButtonTile : GameTile {
     }
     #endregion
 
+    #region Methods
+    public override void SetColor(EColor color) {
+        if(colorChannel == color)
+            return;
+        colorChannel = color;
+        Color newColor = ColorChartManager.GetColorMaterial(color);
+        renderer.material.color = newColor;
+    }
+
+    #region EventCatchers
     private void OnPlayerLocationChange(IndexVector location) {
         //Location is from GameTile
         if(Location == location)
@@ -31,6 +43,9 @@ public class ButtonTile : GameTile {
         else {
             EventManager.AnnounceOnButtonDown(colorChannel);
         }
-        
+
     }
+    #endregion
+
+    #endregion
 }

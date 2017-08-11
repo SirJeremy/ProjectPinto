@@ -4,6 +4,8 @@ using System.Collections;
 public class GateTile : GameTile {
     #region Variables
     [SerializeField]
+    private Renderer[] renderers = null;
+    [SerializeField]
     private Transform[] hinges = new Transform[4];
     [SerializeField]
     private AccelerationVelocityValue avv = new AccelerationVelocityValue();
@@ -37,6 +39,16 @@ public class GateTile : GameTile {
     #endregion
 
     #region Methods
+    public override void SetColor(EColor color) {
+        if(colorChannel == color)
+            return;
+        colorChannel = color;
+        Color newColor = ColorChartManager.GetColorMaterial(color);
+        foreach(Renderer ren in renderers) {
+            ren.material.color = newColor;
+        }
+    }
+
     private void ChangeTraversability() {
         IsTraverseable = isOpen;
         EventManager.AnnounceOnTraversabilityChange(Location, IsTraverseable);
