@@ -2,33 +2,28 @@
 using System.Collections;
 
 public class GateTile : GameTile {
-    public enum EAnimState {
-        IS_CLOSED,
-        IS_OPEN,
-        IS_OPENING,
-        IS_CLOSING
-    }
-
+    #region Variables
+    [SerializeField]
+    private Renderer[] renderers = null;
     [SerializeField]
     private Transform[] hinges = new Transform[4];
     [SerializeField]
     private AccelerationVelocityValue avv = new AccelerationVelocityValue();
 
-    private bool isOpen = false;
-    private bool isWatitingToChange = false;
+    private bool isOpen = false; //keeps track if tile should switch to is or !isTraversable when avaliable to do so
+    private bool isWatitingToChange = false; //happens if something is over the gate
     private bool isPlayingAnimation = false;
-    private EAnimState animState = EAnimState.IS_CLOSED;
     private float coTime = 0;
+    #endregion
 
+    #region MonoBehaviours
     private void Start() {
         isOpen = IsTraverseable;
         if(IsTraverseable) {
-            animState = EAnimState.IS_OPEN;
             avv.ResetToMax();
             SetHingeRotation(avv.Value);
         }
         else {
-            animState = EAnimState.IS_CLOSED;
             avv.ResetToMin();
             SetHingeRotation(avv.Value);
         }
@@ -41,13 +36,41 @@ public class GateTile : GameTile {
         EventManager.OnButtonDown -= OnButtonDown;
         EventManager.OnPlayerLocationChange -= OnPlayerLocationChange;
     }
+    #endregion
 
+    #region Methods
+    public override void SetColor(EColor color) {
+        if(colorChannel == color)
+            return;
+        colorChannel = color;
+        Color newColor = ColorChartManager.GetColorMaterial(color);
+        foreach(Renderer ren in renderers) {
+            ren.material.color = newColor;
+        }
+    }
+
+    private void ChangeTraversability() {
+        IsTraverseable = isOpen;
+        EventManager.AnnounceOnTraversabilityChange(Location, IsTraverseable);
+        if(IsTraverseable)
+            StartOpenAnimation();
+        else
+            StartCloseAnimation();
+    }
+    private void SetHingeRotation(float deg) {
+        deg = Mathf.Repeat(deg, 360);
+        foreach(Transform t in hinges) {
+            t.localRotation = Quaternion.Euler(new Vector3(deg, t.localEulerAngles.y, t.localEulerAngles.z));
+        }
+    }
+
+    #region EventCatchers
     private void OnButtonDown(EColor color) {
         //Location is from GameTile
         if(colorChannel == color) {
             isOpen = !isOpen;
             if(!isWatitingToChange) {
-                if(BoardManager.Instance.GameBoard.CurrentPlayerPosition == Location)
+                if(BoardManager.Instance.GameBoard.CurrentPlayerPosition == Location || BoardManager.Instance.GameBoard.PlayerMovingTo == Location)
                     isWatitingToChange = true;
                 else
                     ChangeTraversability();
@@ -60,45 +83,34 @@ public class GateTile : GameTile {
             ChangeTraversability();
         }
     }
+    #endregion
 
-    private void ChangeTraversability() {
-        IsTraverseable = isOpen;
-        EventManager.AnnounceOnTraversabilityChange(Location, IsTraverseable);
-        if(IsTraverseable)
-            StartOpenAnimation();
-        else
-            StartCloseAnimation();
-    }
-
+    #region AnimationMethods
     private void StartCloseAnimation() /* Closed == hinges pointed up */ {
-        animState = EAnimState.IS_CLOSING;
         if(!isPlayingAnimation)
-            StartCoroutine(AnimCo());
+            StartCoroutine(Animate());
     }
     private void StartOpenAnimation() /* Open == hinges pointed down */ {
-        animState = EAnimState.IS_OPENING;
         if(!isPlayingAnimation)
-            StartCoroutine(AnimCo());
+            StartCoroutine(Animate());
     }
-    private IEnumerator AnimCo() {
+    private IEnumerator Animate() {
         isPlayingAnimation = true;
         coTime = Time.time - Time.deltaTime;
         while(true) {
-            if(animState == EAnimState.IS_CLOSING) {
-                SetHingeRotation(avv.Decrement(Time.time - coTime));
-                coTime = Time.time;
-                if(avv.IsValueAtMin) {
-                    avv.ResetToMin();
-                    animState = EAnimState.IS_CLOSED;
-                    break;
-                }
-            }
-            else if(animState == EAnimState.IS_OPENING) {
+            if(IsTraverseable) /* Is opening */ {
                 SetHingeRotation(avv.Increment(Time.time - coTime));
                 coTime = Time.time;
                 if(avv.IsValueAtMax) {
                     avv.ResetToMax();
-                    animState = EAnimState.IS_OPEN;
+                    break;
+                }
+            }
+            else /* Is closing  */ {
+                SetHingeRotation(avv.Decrement(Time.time - coTime));
+                coTime = Time.time;
+                if(avv.IsValueAtMin) {
+                    avv.ResetToMin();
                     break;
                 }
             }
@@ -107,11 +119,7 @@ public class GateTile : GameTile {
         isPlayingAnimation = false;
         yield return null;
     }
+    #endregion
 
-    private void SetHingeRotation(float deg) {
-        deg = Mathf.Repeat(deg, 360);
-        foreach(Transform t in hinges) {
-            t.localRotation = Quaternion.Euler(new Vector3(deg, t.localEulerAngles.y, t.localEulerAngles.z));
-        }
-    }
+    #endregion
 }

@@ -6,6 +6,7 @@ public class GameBoard {
     private int width = 0;
     private int height = 0;
     private IndexVector currentPlayerPosition = IndexVector.Zero;
+    private IndexVector playerMovingTo = IndexVector.Zero;
     #endregion
 
     #region Properties
@@ -13,6 +14,7 @@ public class GameBoard {
     public int Width { get { return width; } }
     public int Height { get { return height; } }
     public IndexVector CurrentPlayerPosition { get { return currentPlayerPosition; } }
+    public IndexVector PlayerMovingTo { get { return playerMovingTo; } }
     #endregion
 
     #region Constructors
@@ -83,6 +85,7 @@ public class GameBoard {
     }
     public void StartMovePlayer(IndexVector destination) {
         board[destination.X, destination.Y].IsPlayerIsMovingIn = true;
+        playerMovingTo = destination;
     }
     public void StartMovePlayer(EDirection direction) {
         StartMovePlayer(currentPlayerPosition + GetDirection(direction));
