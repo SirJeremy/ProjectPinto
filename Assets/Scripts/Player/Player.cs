@@ -3,6 +3,8 @@ using System.Collections;
 
 public class Player : MonoBehaviour {
     #region Variables
+    [SerializeField]
+    private float yPos = 0;
     private float moveSpeed = 2f;
     private IndexVector currentLocation = IndexVector.Zero;
     private bool isMoving = false;
@@ -31,6 +33,7 @@ public class Player : MonoBehaviour {
     }
     public void Initialize(IndexVector startingLocation) {
         currentLocation = startingLocation;
+        transform.position += new Vector3(0, yPos, 0);
     }
     #endregion
 
@@ -61,8 +64,8 @@ public class Player : MonoBehaviour {
             //Start of move cycle
             BoardManager.Instance.GameBoard.StartMovePlayer(dir);
             EventManager.AnnounceOnPlayerStartLocationChange(currentLocation + IndexVector.GetDirection(dir));
-            startPoint = currentLocation.ToVector3;
-            endPoint = currentLocation.ToVector3 + IndexVector.GetDirection(dir).ToVector3;
+            startPoint = currentLocation.ToVector3 + new Vector3(0, yPos, 0);
+            endPoint = currentLocation.ToVector3 + IndexVector.GetDirection(dir).ToVector3 + new Vector3(0, yPos, 0);
             startTime = Time.time;
 
             //Update of move cycle

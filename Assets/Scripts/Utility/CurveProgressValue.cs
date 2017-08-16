@@ -63,12 +63,36 @@ public class CurveProgressValue {
     public void IncrementProgress() {
         Progress += Time.deltaTime * progressSpeed;
     }
+    public void IncrementProgress(float deltaTime) {
+        Progress += Time.deltaTime * progressSpeed;
+    }
+    public void DecrementProgress() {
+        Progress -= Time.deltaTime * progressSpeed;
+    }
+    public void DecrementProgress(float deltaTime) {
+        Progress -= Time.deltaTime * progressSpeed;
+    }
     public float GetValueAndIncrementProgress() {
         IncrementProgress();
         return Value;
     }
-    public void Reset() {
+    public float GetValueAndIncrementProgress(float deltaTime) {
+        IncrementProgress(deltaTime);
+        return Value;
+    }
+    public float GetValueAndDecrementProgress() {
+        DecrementProgress();
+        return Value;
+    }
+    public float GetValueAndDecrementProgress(float deltaTime) {
+        DecrementProgress(deltaTime);
+        return Value;
+    }
+    public void SetToMin() {
         progress = 0;
+    }
+    public void SetToMax() {
+        progress = 1;
     }
     #endregion
 }
