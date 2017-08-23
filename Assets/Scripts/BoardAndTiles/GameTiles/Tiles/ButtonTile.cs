@@ -48,9 +48,13 @@ public class ButtonTile : GameTile {
     }
     private void OnPlayerStartLocationChange(IndexVector location) {
         if(Location == location) {
-            EnterPressAnimation();
-            if(!canOnlyBePressedOnce)
+            if(!canOnlyBePressedOnce) {
                 needToRelease = true;
+                EnterPressAnimation();
+            }
+            else if(!hasBeenPressed) {
+                EnterPressAnimation();
+            } 
         }
         else if(needToRelease) {
             EnterReleaseAnimation();
