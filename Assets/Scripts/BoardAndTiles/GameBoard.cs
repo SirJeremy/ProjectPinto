@@ -57,25 +57,25 @@ public class GameBoard {
             case EDirection.UP:
                 if(currentPlayerPosition.Y < height - 1) {
                     IndexVector destination = currentPlayerPosition + GetDirection(direction);
-                    return board[destination.X, destination.Y].IsTraversable;
+                    return Helper.HasFlag(board[destination.X, destination.Y].Travarsability, ETraversableDirection.FROM_DOWN);
                 }
                 return false;
             case EDirection.DOWN:
                 if(currentPlayerPosition.Y > 0) {
                     IndexVector destination = currentPlayerPosition + GetDirection(direction);
-                    return board[destination.X, destination.Y].IsTraversable;
+                    return Helper.HasFlag(board[destination.X, destination.Y].Travarsability, ETraversableDirection.FROM_UP);
                 }
                 return false;
             case EDirection.LEFT:
                 if(currentPlayerPosition.X > 0) {
                     IndexVector destination = currentPlayerPosition + GetDirection(direction);
-                    return board[destination.X, destination.Y].IsTraversable;
+                    return Helper.HasFlag(board[destination.X, destination.Y].Travarsability, ETraversableDirection.FROM_RIGHT);
                 }
                 return false;
             case EDirection.RIGHT:
                 if(currentPlayerPosition.X < width - 1) {
                     IndexVector destination = currentPlayerPosition + GetDirection(direction);
-                    return board[destination.X, destination.Y].IsTraversable;
+                    return Helper.HasFlag(board[destination.X, destination.Y].Travarsability, ETraversableDirection.FROM_LEFT);
                 }
                 return false;
             default:

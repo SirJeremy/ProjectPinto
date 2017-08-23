@@ -2,7 +2,7 @@
 
 public class GameTile : MonoBehaviour {
     [SerializeField]
-    private bool isTraveseable = true;
+    private ETraversableDirection traversability = ETraversableDirection.FULLY_TRAVERSABLE;
     [SerializeField]
     private bool canChangeTraversability = false;
     [SerializeField]
@@ -11,7 +11,8 @@ public class GameTile : MonoBehaviour {
     private IndexVector location = IndexVector.Zero;
 
     public IndexVector Location { get { return location; } set { location = value; } }
-    public bool IsTraverseable { get { return isTraveseable; } protected set { isTraveseable = value; } }
+    public bool IsTraverseable { get { return Helper.HasFlag(traversability, ETraversableDirection.FULLY_TRAVERSABLE); } }
+    public ETraversableDirection Traversability { get { return traversability; } protected set { traversability = value; } }
     public bool CanChangeTraversability { get { return canChangeTraversability; } }
     public ETile Type { get { return type; } }
 
