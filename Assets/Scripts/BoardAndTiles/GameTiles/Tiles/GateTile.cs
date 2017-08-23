@@ -50,8 +50,11 @@ public class GateTile : GameTile {
     }
 
     private void ChangeTraversability() {
-        IsTraverseable = isOpen;
-        EventManager.AnnounceOnTraversabilityChange(Location, IsTraverseable);
+        if(isOpen)
+            Traversability = ETraversableDirection.FULLY_TRAVERSABLE;
+        else
+            Traversability = ETraversableDirection.NON_TRAVERSBLE;
+        EventManager.AnnounceOnTraversabilityChange(Location, Traversability);
         if(IsTraverseable)
             StartOpenAnimation();
         else

@@ -32,19 +32,19 @@ public static class GameTileSpawner {
             prefabs.Add(gts.GameTilePairs[i].type, gts.GameTilePairs[i].prefab);
         }
     }
-    public static GameObject SpawnGameTile(ETile tile, EColor color, IndexVector location, out bool isTraverseable, out bool canChangeTraversability) {
+    public static GameObject SpawnGameTile(ETile tile, EColor color, IndexVector location, out ETraversableDirection traversability, out bool canChangeTraversability) {
         GameObject go = Object.Instantiate(prefabs[tile], location.ToVector3, Quaternion.identity, BoardHolder);
         GameTile gt = go.GetComponent<GameTile>();
         go.name = go.name + " " + location.ToString();
         if(gt == null) {
             Debug.LogError("No GameTile attached to GameObject " + go.name);
-            isTraverseable = true;
+            traversability = ETraversableDirection.FULLY_TRAVERSABLE;
             canChangeTraversability = false;
         }   
         else {
             gt.Location = location;
             gt.SetColor(color);
-            isTraverseable = gt.IsTraverseable; //stored in prefab
+            traversability = gt.Traversability; //stored in prefab
             canChangeTraversability = gt.CanChangeTraversability; //stored in prefab
         }
         return go;

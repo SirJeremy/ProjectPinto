@@ -2,7 +2,7 @@
 public static class EventManager {
     #region Delegates
     public delegate void Empty();
-    public delegate void IndexVectorBool(IndexVector location, bool isTraversable);
+    public delegate void IndexVectorBool(IndexVector location, ETraversableDirection travarsability);
     public delegate void DEDirection(EDirection direction);
     public delegate void DIndexVector(IndexVector location);
     public delegate void DEColor(EColor color);
@@ -10,7 +10,7 @@ public static class EventManager {
     #endregion
 
     #region Events
-    public static event IndexVectorBool OnTraversabilityChange; //when a game tile want to change its isTraversability
+    public static event IndexVectorBool OnTraversabilityChange; //when a game tile want to change its traversability
     public static event DEDirection OnMoveInput; //when move input occurs
     public static event DIndexVector OnPlayerStartLocationChange; //when the player start to move to a new space, ie when the player is moving into a square; give the location moving to
     public static event DIndexVector OnPlayerLocationChange; //when the player moves to a new space
@@ -24,7 +24,7 @@ public static class EventManager {
     #endregion
 
     #region EventCalls
-    public static void AnnounceOnTraversabilityChange(IndexVector location, bool isTraversable) { if(OnTraversabilityChange != null) OnTraversabilityChange(location, isTraversable); }
+    public static void AnnounceOnTraversabilityChange(IndexVector location, ETraversableDirection travarsability) { if(OnTraversabilityChange != null) OnTraversabilityChange(location, travarsability); }
     public static void AnnounceOnMoveInput(EDirection direction) { if(OnMoveInput != null) OnMoveInput(direction); }
     public static void AnnounceOnPlayerStartLocationChange(IndexVector location) { if(OnPlayerStartLocationChange != null) OnPlayerStartLocationChange(location); }
     public static void AnnounceOnPlayerLocationChange(IndexVector location) { if(OnPlayerLocationChange != null) OnPlayerLocationChange(location); }
